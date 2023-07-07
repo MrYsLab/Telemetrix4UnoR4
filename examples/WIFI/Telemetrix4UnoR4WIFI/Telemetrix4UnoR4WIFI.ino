@@ -551,7 +551,7 @@ TwoWire *current_i2c_port;
 #ifdef LED_MATRIX_SUPPORTED
 #define MAX_SCROLL_MESSAGE 25
 uint8_t run_banner = 0;
-uint8_t banner_text[25];
+uint8_t banner_text[50];
 uint8_t no_banner[25] = { 32 };  // turn off all pixels
 uint8_t scroll_speed = 50;
 const uint16_t ontime = 521;  // microseconds. 521 (us) * 96 (pixels) = 50 ms frame rate if all the pixels are on.
@@ -2312,6 +2312,7 @@ void loop() {
     if (strlen((char *)led_matrix_buffer) == 0) {
         String addr = WiFi.localIP().toString();
         addr.toCharArray((char *) banner_text, 20);
+
         //Serial.println((char *)banner_text);
         led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
     }
@@ -2348,9 +2349,6 @@ void loop() {
             run_matrix();
 #endif
         }
-
-        client.stop();
-        Serial.println("Client disconnected");
         board_hard_reset();
     }
 }
