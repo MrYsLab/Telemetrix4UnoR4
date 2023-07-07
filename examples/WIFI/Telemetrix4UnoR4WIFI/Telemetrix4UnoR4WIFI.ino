@@ -2309,8 +2309,22 @@ void setup() {
 
 void loop() {
     client = server.available();
+    if (strlen((char *)led_matrix_buffer) == 0) {
+        String addr = WiFi.localIP().toString();
+        addr.toCharArray((char *) banner_text, 20);
+        //Serial.println((char *)banner_text);
+        led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
+    }
+
+    //banner_text  = (char*)WiFi.localIP().toString();
+    run_banner = true;
+    run_matrix();
 
     if (client) {
+        memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
+        memset(banner_text, 0, sizeof(banner_text));
+
+        run_banner = false;
         Serial.print("Client Connected to address: ");
         Serial.println(client.remoteIP());
 
@@ -2334,6 +2348,7 @@ void loop() {
             run_matrix();
 #endif
         }
+
         client.stop();
         Serial.println("Client disconnected");
         board_hard_reset();
