@@ -547,8 +547,7 @@ TwoWire *current_i2c_port;
 #ifdef LED_MATRIX_SUPPORTED
 #define MAX_SCROLL_MESSAGE 25
 uint8_t run_banner = 0;
-uint8_t banner_text[50] = "Telemetrix BLE Wait...  ";
-uint8_t no_banner[25] = {32};  // turn off all pixels
+static uint8_t banner_text[50] = "Telemetrix BLE Wait...  ";
 uint8_t scroll_speed = 50;
 const uint16_t ontime = 521;  // microseconds. 521 (us) * 96 (pixels) = 50 ms frame rate if all the pixels are on.
 static uint8_t scroll = 0;    // scroll position.
@@ -1273,6 +1272,8 @@ void board_hard_reset() {
 void matrix_banner_on() {
     uint8_t message_length = command_buffer[0];
     scroll_speed = command_buffer[1];
+    memset(banner_text, 0, sizeof(banner_text));
+    memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
     for (int i = 0; i < message_length; i++) {
         banner_text[i] = command_buffer[2 + i];
     }
@@ -2253,7 +2254,6 @@ void setup() {
     // Ready...
     t_prev = millis();
     run_banner = true;
-    //run_matrix();
 #endif
     pinMode(13, OUTPUT);
     for (int i = 0; i < 4; i++) {
@@ -2283,14 +2283,6 @@ void setup() {
 void loop() {
     if (bleSerial) {
         bleSerial.poll();
-
-
-        memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
-        memset(banner_text, 0, sizeof(banner_text));
-
-        run_banner = false;
-
-
         // keep processing incoming commands
         get_next_command();
 
