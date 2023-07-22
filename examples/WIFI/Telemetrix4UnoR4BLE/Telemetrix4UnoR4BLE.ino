@@ -24,6 +24,9 @@ const char *ble_name = "Telemetrix4UnoR4 BLE";
 
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
+// comment out this line to suppress the starting banner
+#define ENABLE_STARTING_BANNER 1
+
 
 // This file is rather large, so it has been rearranged in logical sections.
 // Here is the list of sections to help make it easier to locate items of interest,
@@ -2231,10 +2234,6 @@ void setup() {
     for (uint8_t i = 0; i < led_matrix_pin_count; i++) {
         pinMode(led_matrix_pin_first + i, INPUT);  // all off
     }
-    // Load text message.
-    //led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
-    // Ready...
-    //t_prev = millis();
 #endif
 
 #ifdef STEPPERS_ENABLED
@@ -2249,11 +2248,13 @@ void setup() {
     Serial.begin(115200);
     while (!Serial) { ;  // wait for serial port to connect.
     }
+#ifdef ENABLE_STARTING_BANNER
     led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
     // Ready...
     t_prev = millis();
     run_banner = true;
-    run_matrix();
+    //run_matrix();
+#endif
     pinMode(13, OUTPUT);
     for (int i = 0; i < 4; i++) {
         digitalWrite(13, HIGH);
@@ -2269,11 +2270,13 @@ void setup() {
         }
     }
 
-    while (!bleSerial);
+    while (!bleSerial)
+        run_matrix();
 
     Serial.println("HardwareBLESerial central device connected!");
+#ifdef ENABLE_STARTING_BANNER
     run_banner = false;
-
+#endif
 
 }
 
@@ -2319,12 +2322,4 @@ void loop() {
         bleSerial.end();
         board_hard_reset();
     }
-
-    //}
-
-    //board_hard_reset();
-    //}
-
-    //run_matrix();
-
 }
