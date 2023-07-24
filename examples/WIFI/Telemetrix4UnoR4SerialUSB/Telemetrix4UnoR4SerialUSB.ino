@@ -14,15 +14,6 @@
   along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include <Arduino.h>
-#include "Telemetrix4UnoR4.h"
-#include <WiFiS3.h>
-#include <HardwareBLESerial.h>
-
-
-const char *ble_name = "Telemetrix4UnoR4 BLE";
-
-HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 
 // This file is rather large, so it has been rearranged in logical sections.
@@ -45,7 +36,8 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 /*                    FEATURE ENABLING DEFINES                      */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-
+// comment out this line to suppress the starting banner
+#define ENABLE_STARTING_BANNER 1
 
 // To disable a feature, comment out the desired enabling define or defines
 
@@ -67,7 +59,7 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 // This will allow servo support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-// #define SERVO_ENABLED 1
+#define SERVO_ENABLED 1
 
 // This will allow stepper support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
@@ -81,6 +73,9 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 // This allows LED matrix support to be compiled in the sketch.
 // Comment this out to save sketch space for the UNO
 #define LED_MATRIX_SUPPORTED 1
+
+#include <Arduino.h>
+#include "Telemetrix4UnoR4.h"
 
 #ifdef SERVO_ENABLED
 
@@ -119,9 +114,7 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 #endif
 
 #ifdef STEPPERS_ENABLED
-
 #include <AccelStepper.h>
-
 #endif
 
 #ifdef LED_MATRIX_SUPPORTED
@@ -549,7 +542,7 @@ TwoWire *current_i2c_port;
 #ifdef LED_MATRIX_SUPPORTED
 #define MAX_SCROLL_MESSAGE 25
 uint8_t run_banner = 0;
-uint8_t banner_text[50] = "Telemetrix BLE Wait...  ";
+uint8_t banner_text[50] = "USBSerial";
 uint8_t no_banner[25] = {32};  // turn off all pixels
 uint8_t scroll_speed = 50;
 const uint16_t ontime = 521;  // microseconds. 521 (us) * 96 (pixels) = 50 ms frame rate if all the pixels are on.
@@ -751,13 +744,6 @@ uint32_t t_prev = 0;
 
 #endif
 
-/* write the contents of a buffer to bleserial */
-void write_message(char *buffer, int num_bytes) {
-    for (int i = 0; i < num_bytes; i++) {
-        bleSerial.write(buffer[i]);
-    }
-}
-
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 /*           Pin Related Defines And Data Structures                */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
@@ -895,6 +881,7 @@ AccelStepper *steppers[MAX_NUMBER_OF_STEPPERS];
 uint8_t stepper_run_modes[MAX_NUMBER_OF_STEPPERS];
 #endif
 
+
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 /*                       Command Functions                          */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
@@ -906,13 +893,14 @@ void send_debug_info(byte id, int value) {
     debug_buffer[2] = id;
     debug_buffer[3] = highByte(value);
     debug_buffer[4] = lowByte(value);
-    write_message((char *) debug_buffer, 5);
+    Serial.write(debug_buffer, 5);
 }
 
 // a function to loop back data over the serial port
 void serial_loopback() {
     byte loop_back_buffer[3] = {2, (byte) SERIAL_LOOP_BACK, command_buffer[0]};
-    write_message((char *) loop_back_buffer, 3);
+    Serial.write(loop_back_buffer, 3);
+    delay(30);
 }
 
 void set_pin_mode()
@@ -1025,20 +1013,20 @@ void modify_reporting() {
 // retrieve the features byte
 void get_features() {
     byte report_message[3] = {2, FEATURES, features};
-    write_message((char *) report_message, 3);
+    Serial.write(report_message, 3);
 }
 
 // Return the firmware version number
 void get_firmware_version() {
     byte report_message[5] = {4, FIRMWARE_REPORT, FIRMWARE_MAJOR, FIRMWARE_MINOR,
                               FIRMWARE_PATCH};
-    write_message((char *) report_message, 5);
+    Serial.write(report_message, 5);
 }
 
 // Query the firmware for the Arduino ID in use
 void are_you_there() {
     byte report_message[3] = {2, I_AM_HERE, ARDUINO_ID};
-    write_message((char *) report_message, 3);
+    Serial.write(report_message, 3);
 }
 
 /***************************************************
@@ -1079,7 +1067,7 @@ void servo_attach() {
     } else {
         // no open servos available, send a report back to client
         byte report_message[2] = {SERVO_UNAVAILABLE, pin};
-        write_message((char *) report_message, 2);
+        Serial.write(report_message, 2);
     }
 #endif
 }
@@ -1175,11 +1163,11 @@ void i2c_read() {
     // check to be sure correct number of bytes were returned by slave
     if (command_buffer[2] < current_i2c_port->available()) {
         byte report_message[4] = {3, I2C_TOO_FEW_BYTES_RCVD, 1, address};
-        write_message((char *) report_message, 4);
+        Serial.write(report_message, 4);
         return;
     } else if (command_buffer[2] > current_i2c_port->available()) {
         byte report_message[4] = {3, I2C_TOO_MANY_BYTES_RCVD, 1, address};
-        write_message((char *) report_message, 4);
+        Serial.write(report_message, 4);
         return;
     }
 
@@ -1206,8 +1194,10 @@ void i2c_read() {
         i2c_report_message[6 + message_size] = current_i2c_port->read();
     }
     // send slave address, register and received bytes
-    write_message((char *) i2c_report_message, message_size + 6);
 
+    for (int i = 0; i < message_size + 6; i++) {
+        Serial.write(i2c_report_message[i]);
+    }
 #endif
 }
 
@@ -1387,8 +1377,8 @@ void read_blocking_spi() {
     digitalWrite(command_buffer[0], 1);
 
     SPI.endTransaction();
-    write_message((char *) spi_report_message,
-                  command_buffer[1] + 5);
+
+    Serial.write(spi_report_message, command_buffer[1] + 5);
 
 #endif
 }
@@ -1454,7 +1444,8 @@ void onewire_reset() {
 
     uint8_t reset_return = ow->reset();
     uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_RESET, reset_return};
-    write_message((char *) onewire_report_message, 4);
+
+    Serial.write(onewire_report_message, 4);
 #endif
 }
 
@@ -1499,8 +1490,8 @@ void onewire_read() {
     uint8_t data = ow->read();
 
     uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_READ, data};
-    write_message((char *) onewire_report_message, 4);
 
+    Serial.write(onewire_report_message, 4);
 #endif
 }
 
@@ -1521,7 +1512,7 @@ void onewire_search() {
                                         0xff};
 
     ow->search(&onewire_report_message[3]);
-    write_message((char *) onewire_report_message, 11);
+    Serial.write(onewire_report_message, 11);
 #endif
 }
 
@@ -1531,7 +1522,7 @@ void onewire_crc8() {
 
     uint8_t crc = ow->crc8(&command_buffer[1], command_buffer[0]);
     uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_CRC8, crc};
-    write_message((char *) onewire_report_message, 4);
+    Serial.write(onewire_report_message, 4);
 #endif
 }
 
@@ -1566,8 +1557,8 @@ void stepper_move_to() {
     // polarity = command_buffer[5]
 
     // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[1]) << 24;
-    position += (long) (command_buffer[2]) << 16;
+    long position = (long)(command_buffer[1]) << 24;
+    position += (long)(command_buffer[2]) << 16;
     position += command_buffer[3] << 8;
     position += command_buffer[4];
     if (command_buffer[5]) {
@@ -1589,8 +1580,8 @@ void stepper_move() {
 
 
     // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[1]) << 24;
-    position += (long) (command_buffer[2]) << 16;
+    long position = (long)(command_buffer[1]) << 24;
+    position += (long)(command_buffer[2]) << 16;
     position += command_buffer[3] << 8;
     position += command_buffer[4];
     if (command_buffer[5]) {
@@ -1621,7 +1612,7 @@ void stepper_set_max_speed() {
     // speed_msb = command_buffer[1]
     // speed_lsb = command_buffer[2]
 
-    float max_speed = (float) ((command_buffer[1] << 8) + command_buffer[2]);
+    float max_speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
     steppers[command_buffer[0]]->setMaxSpeed(max_speed);
 #endif
 }
@@ -1633,7 +1624,7 @@ void stepper_set_acceleration() {
     // accel_msb = command_buffer[1]
     // accel = command_buffer[2]
 
-    float acceleration = (float) ((command_buffer[1] << 8) + command_buffer[2]);
+    float acceleration = (float)((command_buffer[1] << 8) + command_buffer[2]);
     steppers[command_buffer[0]]->setAcceleration(acceleration);
 #endif
 }
@@ -1645,7 +1636,7 @@ void stepper_set_speed() {
     // speed_lsb = command_buffer[2]
 #ifdef STEPPERS_ENABLED
 
-    float speed = (float) ((command_buffer[1] << 8) + command_buffer[2]);
+    float speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
     steppers[command_buffer[0]]->setSpeed(speed);
 #endif
 }
@@ -1658,7 +1649,7 @@ void stepper_get_distance_to_go() {
 
 
 
-    byte report_message[7] = {6, STEPPER_DISTANCE_TO_GO, command_buffer[0]};
+    byte report_message[7] = { 6, STEPPER_DISTANCE_TO_GO, command_buffer[0] };
 
     long dtg = steppers[command_buffer[0]]->distanceToGo();
 
@@ -1669,7 +1660,7 @@ void stepper_get_distance_to_go() {
     report_message[6] = (byte)((dtg & 0x000000FF));
 
     // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+    Serial.write(report_message, 7);
 #endif
 }
 
@@ -1681,7 +1672,7 @@ void stepper_get_target_position() {
 
 
 
-    byte report_message[7] = {6, STEPPER_TARGET_POSITION, command_buffer[0]};
+    byte report_message[7] = { 6, STEPPER_TARGET_POSITION, command_buffer[0] };
 
     long target = steppers[command_buffer[0]]->targetPosition();
 
@@ -1692,7 +1683,7 @@ void stepper_get_target_position() {
     report_message[6] = (byte)((target & 0x000000FF));
 
     // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+    Serial.write(report_message, 7);
 #endif
 }
 
@@ -1704,7 +1695,7 @@ void stepper_get_current_position() {
 
 
 
-    byte report_message[7] = {6, STEPPER_CURRENT_POSITION, command_buffer[0]};
+    byte report_message[7] = { 6, STEPPER_CURRENT_POSITION, command_buffer[0] };
 
     long position = steppers[command_buffer[0]]->currentPosition();
 
@@ -1715,7 +1706,7 @@ void stepper_get_current_position() {
     report_message[6] = (byte)((position & 0x000000FF));
 
     // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+    Serial.write(report_message, 7);
 #endif
 }
 
@@ -1728,8 +1719,8 @@ void stepper_set_current_position() {
     // position LSB = command_buffer[4]
 
     // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[2]) << 24;
-    position += (long) (command_buffer[2]) << 16;
+    long position = (long)(command_buffer[2]) << 24;
+    position += (long)(command_buffer[2]) << 16;
     position += command_buffer[3] << 8;
     position += command_buffer[4];
 
@@ -1775,7 +1766,7 @@ void stepper_set_minimum_pulse_width() {
 
 void stepper_set_enable_pin() {
 #ifdef STEPPERS_ENABLED
-    steppers[command_buffer[0]]->setEnablePin((uint8_t) command_buffer[1]);
+    steppers[command_buffer[0]]->setEnablePin((uint8_t)command_buffer[1]);
 #endif
 }
 
@@ -1784,9 +1775,9 @@ void stepper_set_3_pins_inverted() {
     // command_buffer[1] = directionInvert
     // command_buffer[2] = stepInvert
     // command_buffer[3] = enableInvert
-    steppers[command_buffer[0]]->setPinsInverted((bool) command_buffer[1],
-                                                 (bool) command_buffer[2],
-                                                 (bool) command_buffer[3]);
+    steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
+                                                 (bool)command_buffer[2],
+                                                 (bool)command_buffer[3]);
 #endif
 }
 
@@ -1797,11 +1788,11 @@ void stepper_set_4_pins_inverted() {
     // command_buffer[4] = pin4
     // command_buffer[5] = enable
 #ifdef STEPPERS_ENABLED
-    steppers[command_buffer[0]]->setPinsInverted((bool) command_buffer[1],
-                                                 (bool) command_buffer[2],
-                                                 (bool) command_buffer[3],
-                                                 (bool) command_buffer[4],
-                                                 (bool) command_buffer[5]);
+    steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
+                                                 (bool)command_buffer[2],
+                                                 (bool)command_buffer[3],
+                                                 (bool)command_buffer[4],
+                                                 (bool)command_buffer[5]);
 #endif
 }
 
@@ -1812,11 +1803,11 @@ void stepper_is_running() {
     // report = STEPPER_IS_RUNNING, motor_id, distance(8 bytes)
 
 
-    byte report_message[3] = {2, STEPPER_RUNNING_REPORT, command_buffer[0]};
+    byte report_message[3] = { 2, STEPPER_RUNNING_REPORT, command_buffer[0] };
 
     report_message[2] = steppers[command_buffer[0]]->isRunning();
 
-    write_message((char *)report_message, 3);
+    Serial.write(report_message, 3);
 #endif
 }
 
@@ -1849,18 +1840,18 @@ void get_next_command() {
     memset(command_buffer, 0, sizeof(command_buffer));
 
     // if there is no command waiting, then return
-    if (not bleSerial.available()) {
+    if (not Serial.available()) {
         return;
     }
     // get the packet length
-    packet_length = (byte) bleSerial.read();
+    packet_length = (byte) Serial.read();
 
-    while (not bleSerial.available()) {
+    while (not Serial.available()) {
         delay(1);
     }
 
     // get the command byte
-    command = (byte) bleSerial.read();
+    command = (byte) Serial.read();
 
     // uncomment the next line to see the packet length and command
     //send_debug_info(packet_length, command);
@@ -1870,16 +1861,15 @@ void get_next_command() {
         // get the data for that command
         for (int i = 0; i < packet_length - 1; i++) {
             // need this delay or data read is not correct
-            while (not bleSerial.available()) {
+            while (not Serial.available()) {
                 delay(1);
             }
-            command_buffer[i] = (byte) bleSerial.read();
+            command_buffer[i] = (byte) Serial.read();
             // uncomment out to see each of the bytes following the command
             //send_debug_info(i, command_buffer[i]);
         }
     }
     command_entry.command_func();
-
 }
 
 // reset the internal data structures to a known state
@@ -1971,7 +1961,7 @@ void scan_digital_inputs() {
                     the_digital_pins[i].last_value = value;
                     report_message[2] = (byte) i;
                     report_message[3] = value;
-                    write_message((char *) report_message, 4);
+                    Serial.write(report_message, 4);
                     delay(1);
                 }
             }
@@ -2015,7 +2005,7 @@ void scan_analog_inputs() {
                         report_message[2] = (byte) i;
                         report_message[3] = highByte(value);  // get high order byte
                         report_message[4] = lowByte(value);
-                        write_message((char *) report_message, 5);
+                        Serial.write(report_message, 5);
                         delay(1);
                     }
                 }
@@ -2044,7 +2034,7 @@ void scan_sonars() {
                 // byte 4 = distance low order byte
                 byte report_message[5] = {4, SONAR_DISTANCE, sonars[last_sonar_visited].trigger_pin,
                                           (byte)(distance >> 8), (byte)(distance & 0xff)};
-                write_message((char *) report_message, 5);
+                Serial.write(report_message, 5);
             }
             last_sonar_visited++;
             if (last_sonar_visited == sonars_index) {
@@ -2105,7 +2095,7 @@ void scan_dhts() {
 
                 // if rv is not zero, this is an error report
                 if (rv) {
-                    write_message((char *) report_message, 11);
+                    Serial.write(report_message, 11);
                     return;
                 } else {
                     float j, f;
@@ -2130,7 +2120,7 @@ void scan_dhts() {
 
                     report_message[9] = (uint8_t) j;
                     report_message[10] = (uint8_t)(f * 100);
-                    write_message((char *) report_message, 11);
+                    Serial.write(report_message, 11);
                 }
             }
         }
@@ -2155,8 +2145,8 @@ void run_steppers() {
                     steppers[i]->run();
                     running = steppers[i]->isRunning();
                     if (!running) {
-                        byte report_message[3] = {2, STEPPER_RUN_COMPLETE_REPORT, (byte) i};
-                        write_message((char *)report_message, 3);
+                        byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+                        Serial.write(report_message, 3);
                         stepper_run_modes[i] = STEPPER_STOP;
                     }
                     break;
@@ -2167,8 +2157,8 @@ void run_steppers() {
                     running = steppers[i]->runSpeedToPosition();
                     target_position = steppers[i]->targetPosition();
                     if (target_position == steppers[i]->currentPosition()) {
-                        byte report_message[3] = {2, STEPPER_RUN_COMPLETE_REPORT, (byte) i};
-                        write_message((char *)report_message, 3);
+                        byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+                        Serial.write(report_message, 3);
                         stepper_run_modes[i] = STEPPER_STOP;
                     }
                     break;
@@ -2236,10 +2226,7 @@ void setup() {
     for (uint8_t i = 0; i < led_matrix_pin_count; i++) {
         pinMode(led_matrix_pin_first + i, INPUT);  // all off
     }
-    // Load text message.
-    led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
-    // Ready...
-    t_prev = millis();
+
 #endif
 
 #ifdef STEPPERS_ENABLED
@@ -2252,11 +2239,15 @@ void setup() {
     init_pin_structures();
 
     Serial.begin(115200);
-    while (!Serial) { ;  // wait for serial port to connect.
-    }
+#ifdef ENABLE_STARTING_BANNER
+
+    //Load scroll message.
     led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
+    // Ready...
     t_prev = millis();
-    run_banner = true;
+#endif
+
+
     pinMode(13, OUTPUT);
     for (int i = 0; i < 4; i++) {
         digitalWrite(13, HIGH);
@@ -2264,73 +2255,33 @@ void setup() {
         digitalWrite(13, LOW);
         delay(250);
     }
-
-    if (!bleSerial.beginAndSetupBLE("Telemetrix4UnoR4 BLE")) {
-        while (true) {
-            Serial.println("failed to initialize HardwareBLESerial!");
-            delay(1000);
-        }
-    }
-
-    while (!bleSerial){
-
-        run_matrix();
-    };
-
-    Serial.println("HardwareBLESerial central device connected!");
-    run_banner = false;
-
-
+    run_banner = true;
+    run_matrix();
 }
 
 void loop() {
-    if (bleSerial) {
-        bleSerial.poll();
+    // keep processing incoming commands
+    get_next_command();
 
-
-        //memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
-        //memset(banner_text, 0, sizeof(banner_text));
-
-        //run_banner = false;
-
-
-        // keep processing incoming commands
-        get_next_command();
-
-        if (!stop_reports) { // stop reporting
-            scan_digital_inputs();
-            scan_analog_inputs();
+    if (!stop_reports) {  // stop reporting
+        scan_digital_inputs();
+        scan_analog_inputs();
 
 #ifdef SONAR_ENABLED
-            if (sonar_reporting_enabled) {
-                scan_sonars();
-            }
+        if (sonar_reporting_enabled) {
+            scan_sonars();
+        }
 #endif
 
 #ifdef DHT_ENABLED
-            scan_dhts();
+        scan_dhts();
 #endif
-
-
 #ifdef STEPPERS_ENABLED
-            run_steppers();
+        run_steppers();
 #endif
 
 #ifdef LED_MATRIX_SUPPORTED
-            run_matrix();
+        run_matrix();
 #endif
-
-        }
-    } else {
-        bleSerial.end();
-        board_hard_reset();
     }
-
-    //}
-
-    //board_hard_reset();
-    //}
-
-    //run_matrix();
-
 }
