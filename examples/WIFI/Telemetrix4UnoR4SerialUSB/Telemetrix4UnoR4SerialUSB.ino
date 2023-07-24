@@ -47,7 +47,7 @@
 
 // This will allow OneWire support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-// #define ONE_WIRE_ENABLED 1
+#define ONE_WIRE_ENABLED 1
 
 // This will allow DHT support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
@@ -354,47 +354,47 @@ struct command_descriptor {
 // The list must be in the same order as the command defines.
 
 command_descriptor command_table[] = {
-        {&serial_loopback},
-        {&set_pin_mode},
-        {&digital_write},
-        {&analog_write},
-        {&modify_reporting},
-        {&get_firmware_version},
-        {&are_you_there},
-        {&servo_attach},
-        {&servo_write},
-        {&servo_detach},
-        {&i2c_begin},
-        {&i2c_read},
-        {&i2c_write},
-        {&sonar_new},
-        {&dht_new},
-        {&stop_all_reports},
-        {&set_analog_scanning_interval},
-        {&enable_all_reports},
-        {&reset_data},
-        {&init_spi},
-        {&write_blocking_spi},
-        {&read_blocking_spi},
-        {&set_format_spi},
-        {&spi_cs_control},
-        {&onewire_init},
-        {&onewire_reset},
-        {&onewire_select},
-        {&onewire_skip},
-        {&onewire_write},
-        {&onewire_read},
-        {&onewire_reset_search},
-        {&onewire_search},
-        {&onewire_crc8},
-        {&set_pin_mode_stepper},
-        {&stepper_move_to},
-        {&stepper_move},
-        {&stepper_run},
-        {&stepper_run_speed},
-        {&stepper_set_max_speed},
-        {&stepper_set_acceleration},
-        {&stepper_set_speed},
+        { &serial_loopback },
+        { &set_pin_mode },
+        { &digital_write },
+        { &analog_write },
+        { &modify_reporting },
+        { &get_firmware_version },
+        { &are_you_there },
+        { &servo_attach },
+        { &servo_write },
+        { &servo_detach },
+        { &i2c_begin },
+        { &i2c_read },
+        { &i2c_write },
+        { &sonar_new },
+        { &dht_new },
+        { &stop_all_reports },
+        { &set_analog_scanning_interval },
+        { &enable_all_reports },
+        { &reset_data },
+        { &init_spi },
+        { &write_blocking_spi },
+        { &read_blocking_spi },
+        { &set_format_spi },
+        { &spi_cs_control },
+        { &onewire_init },
+        { &onewire_reset },
+        { &onewire_select },
+        { &onewire_skip },
+        { &onewire_write },
+        { &onewire_read },
+        { &onewire_reset_search },
+        { &onewire_search },
+        { &onewire_crc8 },
+        { &set_pin_mode_stepper },
+        { &stepper_move_to },
+        { &stepper_move },
+        { &stepper_run },
+        { &stepper_run_speed },
+        { &stepper_set_max_speed },
+        { &stepper_set_acceleration },
+        { &stepper_set_speed },
         (&stepper_set_current_position),
         (&stepper_run_speed_to_position),
         (&stepper_stop),
@@ -406,7 +406,7 @@ command_descriptor command_table[] = {
         (&stepper_set_4_pins_inverted),
         (&stepper_is_running),
         (&stepper_get_current_position),
-        {&stepper_get_distance_to_go},
+        { &stepper_get_distance_to_go },
         (&stepper_get_target_position),
         (&get_features),
         (&sonar_disable),
@@ -543,7 +543,7 @@ TwoWire *current_i2c_port;
 #define MAX_SCROLL_MESSAGE 25
 uint8_t run_banner = 0;
 uint8_t banner_text[50] = "USBSerial";
-uint8_t no_banner[25] = {32};  // turn off all pixels
+uint8_t no_banner[25] = { 32 };  // turn off all pixels
 uint8_t scroll_speed = 50;
 const uint16_t ontime = 521;  // microseconds. 521 (us) * 96 (pixels) = 50 ms frame rate if all the pixels are on.
 static uint8_t scroll = 0;    // scroll position.
@@ -665,14 +665,14 @@ const uint8_t led_matrix_cols = 12;
 // (0,0) is upper left corner when the board's USB connector points to the left.
 const uint8_t led_matrix_pins[led_matrix_rows][led_matrix_cols] = {
         //  0     1     2     3     4     5     6     7     8     9    10     11
-        {0x37, 0x73, 0x47, 0x74, 0x43, 0x34, 0x87, 0x78, 0x83, 0x38, 0x84, 0x48},  // 0
-        {0x07, 0x70, 0x03, 0x30, 0x04, 0x40, 0x08, 0x80, 0x67, 0x76, 0x63, 0x36},  // 1
-        {0x64, 0x46, 0x68, 0x86, 0x60, 0x06, 0x57, 0x75, 0x53, 0x35, 0x54, 0x45},  // 2
-        {0x58, 0x85, 0x50, 0x05, 0x56, 0x65, 0x17, 0x71, 0x13, 0x31, 0x14, 0x41},  // 3
-        {0x18, 0x81, 0x10, 0x01, 0x16, 0x61, 0x15, 0x51, 0x27, 0x72, 0x23, 0x32},  // 4
-        {0x24, 0x42, 0x28, 0x82, 0x20, 0x02, 0x26, 0x62, 0x25, 0x52, 0x21, 0x12},  // 5
-        {0xa7, 0x7a, 0xa3, 0x3a, 0xa4, 0x4a, 0xa8, 0x8a, 0xa0, 0x0a, 0xa6, 0x6a},  // 6
-        {0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49},  // 7
+        { 0x37, 0x73, 0x47, 0x74, 0x43, 0x34, 0x87, 0x78, 0x83, 0x38, 0x84, 0x48 },  // 0
+        { 0x07, 0x70, 0x03, 0x30, 0x04, 0x40, 0x08, 0x80, 0x67, 0x76, 0x63, 0x36 },  // 1
+        { 0x64, 0x46, 0x68, 0x86, 0x60, 0x06, 0x57, 0x75, 0x53, 0x35, 0x54, 0x45 },  // 2
+        { 0x58, 0x85, 0x50, 0x05, 0x56, 0x65, 0x17, 0x71, 0x13, 0x31, 0x14, 0x41 },  // 3
+        { 0x18, 0x81, 0x10, 0x01, 0x16, 0x61, 0x15, 0x51, 0x27, 0x72, 0x23, 0x32 },  // 4
+        { 0x24, 0x42, 0x28, 0x82, 0x20, 0x02, 0x26, 0x62, 0x25, 0x52, 0x21, 0x12 },  // 5
+        { 0xa7, 0x7a, 0xa3, 0x3a, 0xa4, 0x4a, 0xa8, 0x8a, 0xa0, 0x0a, 0xa6, 0x6a },  // 6
+        { 0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49 },  // 7
 };
 
 // Every byte represents a column of the LED matrix.
@@ -769,7 +769,7 @@ uint32_t t_prev = 0;
 
 // To translate a pin number from an integer value to its analog pin number
 // equivalent, this array is used to look up the value to use for the pin.
-int analog_read_pins[6] = {A0, A1, A2, A3, A4, A5};
+int analog_read_pins[6] = { A0, A1, A2, A3, A4, A5 };
 
 // a descriptor for digital pins
 struct pin_descriptor {
@@ -889,7 +889,7 @@ uint8_t stepper_run_modes[MAX_NUMBER_OF_STEPPERS];
 
 // A method to send debug data across the serial link
 void send_debug_info(byte id, int value) {
-    byte debug_buffer[5] = {(byte) 4, (byte) DEBUG_PRINT, 0, 0, 0};
+    byte debug_buffer[5] = { (byte)4, (byte)DEBUG_PRINT, 0, 0, 0 };
     debug_buffer[2] = id;
     debug_buffer[3] = highByte(value);
     debug_buffer[4] = lowByte(value);
@@ -898,7 +898,7 @@ void send_debug_info(byte id, int value) {
 
 // a function to loop back data over the serial port
 void serial_loopback() {
-    byte loop_back_buffer[3] = {2, (byte) SERIAL_LOOP_BACK, command_buffer[0]};
+    byte loop_back_buffer[3] = { 2, (byte)SERIAL_LOOP_BACK, command_buffer[0] };
     Serial.write(loop_back_buffer, 3);
     delay(30);
 }
@@ -1012,20 +1012,20 @@ void modify_reporting() {
 
 // retrieve the features byte
 void get_features() {
-    byte report_message[3] = {2, FEATURES, features};
+    byte report_message[3] = { 2, FEATURES, features };
     Serial.write(report_message, 3);
 }
 
 // Return the firmware version number
 void get_firmware_version() {
-    byte report_message[5] = {4, FIRMWARE_REPORT, FIRMWARE_MAJOR, FIRMWARE_MINOR,
-                              FIRMWARE_PATCH};
+    byte report_message[5] = { 4, FIRMWARE_REPORT, FIRMWARE_MAJOR, FIRMWARE_MINOR,
+                               FIRMWARE_PATCH };
     Serial.write(report_message, 5);
 }
 
 // Query the firmware for the Arduino ID in use
 void are_you_there() {
-    byte report_message[3] = {2, I_AM_HERE, ARDUINO_ID};
+    byte report_message[3] = { 2, I_AM_HERE, ARDUINO_ID };
     Serial.write(report_message, 3);
 }
 
@@ -1066,7 +1066,7 @@ void servo_attach() {
         servos[servo_found].attach(pin, minpulse, maxpulse);
     } else {
         // no open servos available, send a report back to client
-        byte report_message[2] = {SERVO_UNAVAILABLE, pin};
+        byte report_message[2] = { SERVO_UNAVAILABLE, pin };
         Serial.write(report_message, 2);
     }
 #endif
@@ -1155,18 +1155,18 @@ void i2c_read() {
     // write byte is true, then write the register
     if (command_buffer[5]) {
         current_i2c_port->beginTransmission(address);
-        current_i2c_port->write((byte) the_register);
+        current_i2c_port->write((byte)the_register);
         current_i2c_port->endTransmission(command_buffer[3]);  // default = true
     }
     current_i2c_port->requestFrom(address, command_buffer[2]);  // all bytes are returned in requestFrom
 
     // check to be sure correct number of bytes were returned by slave
     if (command_buffer[2] < current_i2c_port->available()) {
-        byte report_message[4] = {3, I2C_TOO_FEW_BYTES_RCVD, 1, address};
+        byte report_message[4] = { 3, I2C_TOO_FEW_BYTES_RCVD, 1, address };
         Serial.write(report_message, 4);
         return;
     } else if (command_buffer[2] > current_i2c_port->available()) {
-        byte report_message[4] = {3, I2C_TOO_MANY_BYTES_RCVD, 1, address};
+        byte report_message[4] = { 3, I2C_TOO_MANY_BYTES_RCVD, 1, address };
         Serial.write(report_message, 4);
         return;
     }
@@ -1241,7 +1241,7 @@ void sonar_new() {
 #ifdef SONAR_ENABLED
 
     // command_buffer[0] = trigger pin,  command_buffer[1] = echo pin
-    sonars[sonars_index].usonic = new NewPing((uint8_t) command_buffer[0], (uint8_t) command_buffer[1]);
+    sonars[sonars_index].usonic = new NewPing((uint8_t)command_buffer[0], (uint8_t)command_buffer[1]);
     sonars[sonars_index].trigger_pin = command_buffer[0];
     sonars_index++;
 #endif
@@ -1443,7 +1443,7 @@ void onewire_reset() {
 #ifdef ONE_WIRE_ENABLED
 
     uint8_t reset_return = ow->reset();
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_RESET, reset_return};
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_RESET, reset_return };
 
     Serial.write(onewire_report_message, 4);
 #endif
@@ -1489,7 +1489,7 @@ void onewire_read() {
 
     uint8_t data = ow->read();
 
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_READ, data};
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_READ, data };
 
     Serial.write(onewire_report_message, 4);
 #endif
@@ -1507,9 +1507,9 @@ void onewire_reset_search() {
 void onewire_search() {
 #ifdef ONE_WIRE_ENABLED
 
-    uint8_t onewire_report_message[] = {10, ONE_WIRE_REPORT, ONE_WIRE_SEARCH,
-                                        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                        0xff};
+    uint8_t onewire_report_message[] = { 10, ONE_WIRE_REPORT, ONE_WIRE_SEARCH,
+                                         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                         0xff };
 
     ow->search(&onewire_report_message[3]);
     Serial.write(onewire_report_message, 11);
@@ -1521,7 +1521,7 @@ void onewire_crc8() {
 #ifdef ONE_WIRE_ENABLED
 
     uint8_t crc = ow->crc8(&command_buffer[1], command_buffer[0]);
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_CRC8, crc};
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_CRC8, crc };
     Serial.write(onewire_report_message, 4);
 #endif
 }
@@ -1532,17 +1532,17 @@ void set_pin_mode_stepper() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // interface = command_buffer[1]
-    // pin1 = command_buffer[2]
-    // pin2 = command_buffer[3]
-    // pin3 = command_buffer[4]
-    // pin4 = command_buffer[5]
-    // enable = command_buffer[6]
+  // interface = command_buffer[1]
+  // pin1 = command_buffer[2]
+  // pin2 = command_buffer[3]
+  // pin3 = command_buffer[4]
+  // pin4 = command_buffer[5]
+  // enable = command_buffer[6]
 
-    // instantiate a stepper object and store it in the stepper array
-    steppers[command_buffer[0]] = new AccelStepper(command_buffer[1], command_buffer[2],
-                                                   command_buffer[3], command_buffer[4],
-                                                   command_buffer[5], command_buffer[6]);
+  // instantiate a stepper object and store it in the stepper array
+  steppers[command_buffer[0]] = new AccelStepper(command_buffer[1], command_buffer[2],
+                                                 command_buffer[3], command_buffer[4],
+                                                 command_buffer[5], command_buffer[6]);
 #endif
 }
 
@@ -1550,21 +1550,21 @@ void stepper_move_to() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
-    // polarity = command_buffer[5]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
+  // polarity = command_buffer[5]
 
-    // convert the 4 position bytes to a long
-    long position = (long)(command_buffer[1]) << 24;
-    position += (long)(command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
-    if (command_buffer[5]) {
-        position *= -1;
-    }
-    steppers[command_buffer[0]]->moveTo(position);
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[1]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
+  if (command_buffer[5]) {
+    position *= -1;
+  }
+  steppers[command_buffer[0]]->moveTo(position);
 #endif
 }
 
@@ -1572,22 +1572,22 @@ void stepper_move() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
-    // polarity = command_buffer[5]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
+  // polarity = command_buffer[5]
 
 
-    // convert the 4 position bytes to a long
-    long position = (long)(command_buffer[1]) << 24;
-    position += (long)(command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
-    if (command_buffer[5]) {
-        position *= -1;
-    }
-    steppers[command_buffer[0]]->move(position);
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[1]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
+  if (command_buffer[5]) {
+    position *= -1;
+  }
+  steppers[command_buffer[0]]->move(position);
 #endif
 }
 
@@ -1609,11 +1609,11 @@ void stepper_set_max_speed() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // speed_msb = command_buffer[1]
-    // speed_lsb = command_buffer[2]
+  // speed_msb = command_buffer[1]
+  // speed_lsb = command_buffer[2]
 
-    float max_speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setMaxSpeed(max_speed);
+  float max_speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
+  steppers[command_buffer[0]]->setMaxSpeed(max_speed);
 #endif
 }
 
@@ -1621,11 +1621,11 @@ void stepper_set_acceleration() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // accel_msb = command_buffer[1]
-    // accel = command_buffer[2]
+  // accel_msb = command_buffer[1]
+  // accel = command_buffer[2]
 
-    float acceleration = (float)((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setAcceleration(acceleration);
+  float acceleration = (float)((command_buffer[1] << 8) + command_buffer[2]);
+  steppers[command_buffer[0]]->setAcceleration(acceleration);
 #endif
 }
 
@@ -1637,7 +1637,7 @@ void stepper_set_speed() {
 #ifdef STEPPERS_ENABLED
 
     float speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setSpeed(speed);
+  steppers[command_buffer[0]]->setSpeed(speed);
 #endif
 }
 
@@ -1645,22 +1645,22 @@ void stepper_get_distance_to_go() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_DISTANCE_TO_GO, motor_id, distance(8 bytes)
+  // report = STEPPER_DISTANCE_TO_GO, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = { 6, STEPPER_DISTANCE_TO_GO, command_buffer[0] };
+  byte report_message[7] = { 6, STEPPER_DISTANCE_TO_GO, command_buffer[0] };
 
-    long dtg = steppers[command_buffer[0]]->distanceToGo();
+  long dtg = steppers[command_buffer[0]]->distanceToGo();
 
 
-    report_message[3] = (byte)((dtg & 0xFF000000) >> 24);
-    report_message[4] = (byte)((dtg & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((dtg & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((dtg & 0x000000FF));
+  report_message[3] = (byte)((dtg & 0xFF000000) >> 24);
+  report_message[4] = (byte)((dtg & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((dtg & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((dtg & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    Serial.write(report_message, 7);
+  // motor_id = command_buffer[0]
+  Serial.write(report_message, 7);
 #endif
 }
 
@@ -1668,22 +1668,22 @@ void stepper_get_target_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_TARGET_POSITION, motor_id, distance(8 bytes)
+  // report = STEPPER_TARGET_POSITION, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = { 6, STEPPER_TARGET_POSITION, command_buffer[0] };
+  byte report_message[7] = { 6, STEPPER_TARGET_POSITION, command_buffer[0] };
 
-    long target = steppers[command_buffer[0]]->targetPosition();
+  long target = steppers[command_buffer[0]]->targetPosition();
 
 
-    report_message[3] = (byte)((target & 0xFF000000) >> 24);
-    report_message[4] = (byte)((target & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((target & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((target & 0x000000FF));
+  report_message[3] = (byte)((target & 0xFF000000) >> 24);
+  report_message[4] = (byte)((target & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((target & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((target & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    Serial.write(report_message, 7);
+  // motor_id = command_buffer[0]
+  Serial.write(report_message, 7);
 #endif
 }
 
@@ -1691,40 +1691,40 @@ void stepper_get_current_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_CURRENT_POSITION, motor_id, distance(8 bytes)
+  // report = STEPPER_CURRENT_POSITION, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = { 6, STEPPER_CURRENT_POSITION, command_buffer[0] };
+  byte report_message[7] = { 6, STEPPER_CURRENT_POSITION, command_buffer[0] };
 
-    long position = steppers[command_buffer[0]]->currentPosition();
+  long position = steppers[command_buffer[0]]->currentPosition();
 
 
-    report_message[3] = (byte)((position & 0xFF000000) >> 24);
-    report_message[4] = (byte)((position & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((position & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((position & 0x000000FF));
+  report_message[3] = (byte)((position & 0xFF000000) >> 24);
+  report_message[4] = (byte)((position & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((position & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((position & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    Serial.write(report_message, 7);
+  // motor_id = command_buffer[0]
+  Serial.write(report_message, 7);
 #endif
 }
 
 void stepper_set_current_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
 
-    // convert the 4 position bytes to a long
-    long position = (long)(command_buffer[2]) << 24;
-    position += (long)(command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[2]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
 
-    steppers[command_buffer[0]]->setCurrentPosition(position);
+  steppers[command_buffer[0]]->setCurrentPosition(position);
 #endif
 }
 
@@ -1738,8 +1738,8 @@ void stepper_run_speed_to_position() {
 void stepper_stop() {
 #ifdef STEPPERS_ENABLED
     steppers[command_buffer[0]]->stop();
-    steppers[command_buffer[0]]->disableOutputs();
-    stepper_run_modes[command_buffer[0]] = STEPPER_STOP;
+  steppers[command_buffer[0]]->disableOutputs();
+  stepper_run_modes[command_buffer[0]] = STEPPER_STOP;
 
 
 #endif
@@ -1760,7 +1760,7 @@ void stepper_enable_outputs() {
 void stepper_set_minimum_pulse_width() {
 #ifdef STEPPERS_ENABLED
     unsigned int pulse_width = (command_buffer[1] << 8) + command_buffer[2];
-    steppers[command_buffer[0]]->setMinPulseWidth(pulse_width);
+  steppers[command_buffer[0]]->setMinPulseWidth(pulse_width);
 #endif
 }
 
@@ -1773,11 +1773,11 @@ void stepper_set_enable_pin() {
 void stepper_set_3_pins_inverted() {
 #ifdef STEPPERS_ENABLED
     // command_buffer[1] = directionInvert
-    // command_buffer[2] = stepInvert
-    // command_buffer[3] = enableInvert
-    steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
-                                                 (bool)command_buffer[2],
-                                                 (bool)command_buffer[3]);
+  // command_buffer[2] = stepInvert
+  // command_buffer[3] = enableInvert
+  steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
+                                               (bool)command_buffer[2],
+                                               (bool)command_buffer[3]);
 #endif
 }
 
@@ -1789,10 +1789,10 @@ void stepper_set_4_pins_inverted() {
     // command_buffer[5] = enable
 #ifdef STEPPERS_ENABLED
     steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
-                                                 (bool)command_buffer[2],
-                                                 (bool)command_buffer[3],
-                                                 (bool)command_buffer[4],
-                                                 (bool)command_buffer[5]);
+                                               (bool)command_buffer[2],
+                                               (bool)command_buffer[3],
+                                               (bool)command_buffer[4],
+                                               (bool)command_buffer[5]);
 #endif
 }
 
@@ -1800,14 +1800,14 @@ void stepper_is_running() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_IS_RUNNING, motor_id, distance(8 bytes)
+  // report = STEPPER_IS_RUNNING, motor_id, distance(8 bytes)
 
 
-    byte report_message[3] = { 2, STEPPER_RUNNING_REPORT, command_buffer[0] };
+  byte report_message[3] = { 2, STEPPER_RUNNING_REPORT, command_buffer[0] };
 
-    report_message[2] = steppers[command_buffer[0]]->isRunning();
+  report_message[2] = steppers[command_buffer[0]]->isRunning();
 
-    Serial.write(report_message, 3);
+  Serial.write(report_message, 3);
 #endif
 }
 
@@ -1844,14 +1844,14 @@ void get_next_command() {
         return;
     }
     // get the packet length
-    packet_length = (byte) Serial.read();
+    packet_length = (byte)Serial.read();
 
     while (not Serial.available()) {
         delay(1);
     }
 
     // get the command byte
-    command = (byte) Serial.read();
+    command = (byte)Serial.read();
 
     // uncomment the next line to see the packet length and command
     //send_debug_info(packet_length, command);
@@ -1864,7 +1864,7 @@ void get_next_command() {
             while (not Serial.available()) {
                 delay(1);
             }
-            command_buffer[i] = (byte) Serial.read();
+            command_buffer[i] = (byte)Serial.read();
             // uncomment out to see each of the bytes following the command
             //send_debug_info(i, command_buffer[i]);
         }
@@ -1950,16 +1950,16 @@ void scan_digital_inputs() {
     // byte 1 = report type
     // byte 2 = pin number
     // byte 3 = value
-    byte report_message[4] = {3, DIGITAL_REPORT, 0, 0};
+    byte report_message[4] = { 3, DIGITAL_REPORT, 0, 0 };
 
     for (int i = 0; i < MAX_DIGITAL_PINS_SUPPORTED; i++) {
         if (the_digital_pins[i].pin_mode == INPUT || the_digital_pins[i].pin_mode == INPUT_PULLUP) {
             if (the_digital_pins[i].reporting_enabled) {
                 // if the value changed since last read
-                value = (byte) digitalRead(the_digital_pins[i].pin_number);
+                value = (byte)digitalRead(the_digital_pins[i].pin_number);
                 if (value != the_digital_pins[i].last_value) {
                     the_digital_pins[i].last_value = value;
-                    report_message[2] = (byte) i;
+                    report_message[2] = (byte)i;
                     report_message[3] = value;
                     Serial.write(report_message, 4);
                     delay(1);
@@ -1981,7 +1981,7 @@ void scan_analog_inputs() {
     // byte 3 = high order byte of value
     // byte 4 = low order byte of value
 
-    byte report_message[5] = {4, ANALOG_REPORT, 0, 0, 0};
+    byte report_message[5] = { 4, ANALOG_REPORT, 0, 0, 0 };
 
     uint8_t adjusted_pin_number;
     int differential;
@@ -2002,7 +2002,7 @@ void scan_analog_inputs() {
                         //trigger value achieved, send out the report
                         the_analog_pins[i].last_value = value;
                         // input_message[1] = the_analog_pins[i].pin_number;
-                        report_message[2] = (byte) i;
+                        report_message[2] = (byte)i;
                         report_message[3] = highByte(value);  // get high order byte
                         report_message[4] = lowByte(value);
                         Serial.write(report_message, 5);
@@ -2032,8 +2032,8 @@ void scan_sonars() {
                 // byte 2 = trigger pin number
                 // byte 3 = distance high order byte
                 // byte 4 = distance low order byte
-                byte report_message[5] = {4, SONAR_DISTANCE, sonars[last_sonar_visited].trigger_pin,
-                                          (byte)(distance >> 8), (byte)(distance & 0xff)};
+                byte report_message[5] = { 4, SONAR_DISTANCE, sonars[last_sonar_visited].trigger_pin,
+                                           (byte)(distance >> 8), (byte)(distance & 0xff) };
                 Serial.write(report_message, 5);
             }
             last_sonar_visited++;
@@ -2066,7 +2066,7 @@ void scan_dhts() {
     // byte 9 = temperature integer portion
     // byte 10= temperature fractional portion
 
-    byte report_message[11] = {10, DHT_REPORT, DHT_DATA, 0, 0, 0, 0, 0, 0, 0, 0};
+    byte report_message[11] = { 10, DHT_REPORT, DHT_DATA, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     int rv;
 
@@ -2091,7 +2091,7 @@ void scan_dhts() {
                 } else {
                     rv = dhts[i].dht_sensor->read11(dhts[i].pin);
                 }
-                report_message[2] = (uint8_t) rv;
+                report_message[2] = (uint8_t)rv;
 
                 // if rv is not zero, this is an error report
                 if (rv) {
@@ -2106,7 +2106,7 @@ void scan_dhts() {
                         report_message[5] = 1;
                     }
                     f = modff(humidity, &j);
-                    report_message[7] = (uint8_t) j;
+                    report_message[7] = (uint8_t)j;
                     report_message[8] = (uint8_t)(f * 100);
 
                     float temperature = dhts[i].dht_sensor->getTemperature();
@@ -2118,7 +2118,7 @@ void scan_dhts() {
 
                     f = modff(temperature, &j);
 
-                    report_message[9] = (uint8_t) j;
+                    report_message[9] = (uint8_t)j;
                     report_message[10] = (uint8_t)(f * 100);
                     Serial.write(report_message, 11);
                 }
@@ -2132,41 +2132,41 @@ void scan_dhts() {
 void run_steppers() {
 #ifdef STEPPERS_ENABLED
     boolean running;
-    long target_position;
+  long target_position;
 
 
-    for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
-        if (stepper_run_modes[i] == STEPPER_STOP) {
-            continue;
-        } else {
-            steppers[i]->enableOutputs();
-            switch (stepper_run_modes[i]) {
-                case STEPPER_RUN:
-                    steppers[i]->run();
-                    running = steppers[i]->isRunning();
-                    if (!running) {
-                        byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
-                        Serial.write(report_message, 3);
-                        stepper_run_modes[i] = STEPPER_STOP;
-                    }
-                    break;
-                case STEPPER_RUN_SPEED:
-                    steppers[i]->runSpeed();
-                    break;
-                case STEPPER_RUN_SPEED_TO_POSITION:
-                    running = steppers[i]->runSpeedToPosition();
-                    target_position = steppers[i]->targetPosition();
-                    if (target_position == steppers[i]->currentPosition()) {
-                        byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
-                        Serial.write(report_message, 3);
-                        stepper_run_modes[i] = STEPPER_STOP;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+  for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
+    if (stepper_run_modes[i] == STEPPER_STOP) {
+      continue;
+    } else {
+      steppers[i]->enableOutputs();
+      switch (stepper_run_modes[i]) {
+        case STEPPER_RUN:
+          steppers[i]->run();
+          running = steppers[i]->isRunning();
+          if (!running) {
+            byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+            Serial.write(report_message, 3);
+            stepper_run_modes[i] = STEPPER_STOP;
+          }
+          break;
+        case STEPPER_RUN_SPEED:
+          steppers[i]->runSpeed();
+          break;
+        case STEPPER_RUN_SPEED_TO_POSITION:
+          running = steppers[i]->runSpeedToPosition();
+          target_position = steppers[i]->targetPosition();
+          if (target_position == steppers[i]->currentPosition()) {
+            byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+            Serial.write(report_message, 3);
+            stepper_run_modes[i] = STEPPER_STOP;
+          }
+          break;
+        default:
+          break;
+      }
     }
+  }
 #endif
 }
 
@@ -2180,7 +2180,7 @@ void run_matrix() {
         if (millis() >= t_prev + scroll_speed) {
             t_prev = millis();
             scroll += 1;                                               // Scroll to the left.
-            if (scroll > 5 * strlen((char *) banner_text)) scroll = 0;  // restart
+            if (scroll > 5 * strlen((char *)banner_text)) scroll = 0;  // restart
         }
     }
 #endif
@@ -2232,8 +2232,8 @@ void setup() {
 #ifdef STEPPERS_ENABLED
 
     for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
-        stepper_run_modes[i] = STEPPER_STOP;
-    }
+    stepper_run_modes[i] = STEPPER_STOP;
+  }
 #endif
 
     init_pin_structures();
