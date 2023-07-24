@@ -25,7 +25,7 @@ const char *password = "";
 
 char16_t PORT = 31336;
 
-// Commant out the following line to suppress starting banner
+// Comment out the following line to suppress starting banner
 #define ENABLE_STARTING_BANNER 1
 
 
