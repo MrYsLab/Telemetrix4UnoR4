@@ -1265,6 +1265,8 @@ void board_hard_reset() {
 void matrix_banner_on() {
     uint8_t message_length = command_buffer[0];
     scroll_speed = command_buffer[1];
+    memset(banner_text, 0, sizeof(banner_text));
+    memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
     for (int i = 0; i < message_length; i++) {
         banner_text[i] = command_buffer[2 + i];
     }
