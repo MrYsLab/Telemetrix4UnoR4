@@ -25,6 +25,9 @@ const char *password = "";
 
 char16_t PORT = 31336;
 
+#define ENABLE_STARTING_BANNER 1
+
+
 WiFiServer server(PORT);
 
 // This file is rather large, so it has been rearranged in logical sections.
@@ -57,7 +60,7 @@ WiFiServer server(PORT);
 
 // This will allow OneWire support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-#define ONE_WIRE_ENABLED 1
+//#define ONE_WIRE_ENABLED 1
 
 // This will allow DHT support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
@@ -83,9 +86,6 @@ WiFiServer server(PORT);
 // This allows LED matrix support to be compiled in the sketch.
 // Comment this out to save sketch space for the UNO
 #define LED_MATRIX_SUPPORTED 1
-
-#include <Arduino.h>
-#include "Telemetrix4UnoR4.h"
 
 #ifdef SERVO_ENABLED
 
@@ -2273,23 +2273,32 @@ void setup() {
     if (WiFi.status() == WL_NO_MODULE) {
         Serial.println("Communication with WiFi module failed!");
         // don't continue
+#ifdef ENABLE_STARTING_BANNER
+
         strcpy((char *) banner_text, "X X X X X X");
         led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
         run_banner = true;
         while (true)
             run_matrix();
+#endif
     }
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.print(ssid);
     Serial.print("  Please wait ...");
 
+
     /* test if user entered ssid */
     if (strlen(ssid) == 0) {
+#ifdef ENABLE_STARTING_BANNER
+
         led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
         run_banner = true;
         while (true)
             run_matrix();
+#endif
+        Serial.println("No SSID Specified");
     }
+
     // attempt to connect to Wi-Fi network:
     while (status != WL_CONNECTED) {
         //Serial.print("Attempting to connect to WPA SSID: ");
@@ -2319,6 +2328,8 @@ void setup() {
 
 void loop() {
     client = server.available();
+#ifdef ENABLE_STARTING_BANNER
+
     if (strlen((char *) led_matrix_buffer) == 0) {
         String addr = WiFi.localIP().toString();
         addr.toCharArray((char *) banner_text, 20);
@@ -2330,6 +2341,7 @@ void loop() {
     //banner_text  = (char*)WiFi.localIP().toString();
     run_banner = true;
     run_matrix();
+#endif
 
     if (client) {
         memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
@@ -2340,9 +2352,6 @@ void loop() {
         Serial.println(client.remoteIP());
 
         while (client.connected()) {
-            // if (client.available())
-
-            //delay(.1);
 
             // keep processing incoming commands
             get_next_command();
