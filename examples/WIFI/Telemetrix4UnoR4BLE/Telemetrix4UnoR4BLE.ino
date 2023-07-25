@@ -48,7 +48,8 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 /*                    FEATURE ENABLING DEFINES                      */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-
+// comment out this line to suppress the starting banner
+#define ENABLE_STARTING_BANNER 1
 
 // To disable a feature, comment out the desired enabling define or defines
 
@@ -122,11 +123,9 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 #endif
 
 #ifdef STEPPERS_ENABLED
-
 #include <AccelStepper.h>
 
 #endif
-
 
 // LED Matrix Support is based on
 // https://github.com/ClemensAtElektor/Arduino-UNO-R4/blob/main/R4WiFi_led_matrix/R4WiFi_led_matrix.ino
@@ -359,47 +358,47 @@ struct command_descriptor {
 // The list must be in the same order as the command defines.
 
 command_descriptor command_table[] = {
-        {&serial_loopback},
-        {&set_pin_mode},
-        {&digital_write},
-        {&analog_write},
-        {&modify_reporting},
-        {&get_firmware_version},
-        {&are_you_there},
-        {&servo_attach},
-        {&servo_write},
-        {&servo_detach},
-        {&i2c_begin},
-        {&i2c_read},
-        {&i2c_write},
-        {&sonar_new},
-        {&dht_new},
-        {&stop_all_reports},
-        {&set_analog_scanning_interval},
-        {&enable_all_reports},
-        {&reset_data},
-        {&init_spi},
-        {&write_blocking_spi},
-        {&read_blocking_spi},
-        {&set_format_spi},
-        {&spi_cs_control},
-        {&onewire_init},
-        {&onewire_reset},
-        {&onewire_select},
-        {&onewire_skip},
-        {&onewire_write},
-        {&onewire_read},
-        {&onewire_reset_search},
-        {&onewire_search},
-        {&onewire_crc8},
-        {&set_pin_mode_stepper},
-        {&stepper_move_to},
-        {&stepper_move},
-        {&stepper_run},
-        {&stepper_run_speed},
-        {&stepper_set_max_speed},
-        {&stepper_set_acceleration},
-        {&stepper_set_speed},
+        { &serial_loopback },
+        { &set_pin_mode },
+        { &digital_write },
+        { &analog_write },
+        { &modify_reporting },
+        { &get_firmware_version },
+        { &are_you_there },
+        { &servo_attach },
+        { &servo_write },
+        { &servo_detach },
+        { &i2c_begin },
+        { &i2c_read },
+        { &i2c_write },
+        { &sonar_new },
+        { &dht_new },
+        { &stop_all_reports },
+        { &set_analog_scanning_interval },
+        { &enable_all_reports },
+        { &reset_data },
+        { &init_spi },
+        { &write_blocking_spi },
+        { &read_blocking_spi },
+        { &set_format_spi },
+        { &spi_cs_control },
+        { &onewire_init },
+        { &onewire_reset },
+        { &onewire_select },
+        { &onewire_skip },
+        { &onewire_write },
+        { &onewire_read },
+        { &onewire_reset_search },
+        { &onewire_search },
+        { &onewire_crc8 },
+        { &set_pin_mode_stepper },
+        { &stepper_move_to },
+        { &stepper_move },
+        { &stepper_run },
+        { &stepper_run_speed },
+        { &stepper_set_max_speed },
+        { &stepper_set_acceleration },
+        { &stepper_set_speed },
         (&stepper_set_current_position),
         (&stepper_run_speed_to_position),
         (&stepper_stop),
@@ -411,7 +410,7 @@ command_descriptor command_table[] = {
         (&stepper_set_4_pins_inverted),
         (&stepper_is_running),
         (&stepper_get_current_position),
-        {&stepper_get_distance_to_go},
+        { &stepper_get_distance_to_go },
         (&stepper_get_target_position),
         (&get_features),
         (&sonar_disable),
@@ -669,14 +668,14 @@ const uint8_t led_matrix_cols = 12;
 // (0,0) is upper left corner when the board's USB connector points to the left.
 const uint8_t led_matrix_pins[led_matrix_rows][led_matrix_cols] = {
         //  0     1     2     3     4     5     6     7     8     9    10     11
-        {0x37, 0x73, 0x47, 0x74, 0x43, 0x34, 0x87, 0x78, 0x83, 0x38, 0x84, 0x48},  // 0
-        {0x07, 0x70, 0x03, 0x30, 0x04, 0x40, 0x08, 0x80, 0x67, 0x76, 0x63, 0x36},  // 1
-        {0x64, 0x46, 0x68, 0x86, 0x60, 0x06, 0x57, 0x75, 0x53, 0x35, 0x54, 0x45},  // 2
-        {0x58, 0x85, 0x50, 0x05, 0x56, 0x65, 0x17, 0x71, 0x13, 0x31, 0x14, 0x41},  // 3
-        {0x18, 0x81, 0x10, 0x01, 0x16, 0x61, 0x15, 0x51, 0x27, 0x72, 0x23, 0x32},  // 4
-        {0x24, 0x42, 0x28, 0x82, 0x20, 0x02, 0x26, 0x62, 0x25, 0x52, 0x21, 0x12},  // 5
-        {0xa7, 0x7a, 0xa3, 0x3a, 0xa4, 0x4a, 0xa8, 0x8a, 0xa0, 0x0a, 0xa6, 0x6a},  // 6
-        {0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49},  // 7
+        { 0x37, 0x73, 0x47, 0x74, 0x43, 0x34, 0x87, 0x78, 0x83, 0x38, 0x84, 0x48 },  // 0
+        { 0x07, 0x70, 0x03, 0x30, 0x04, 0x40, 0x08, 0x80, 0x67, 0x76, 0x63, 0x36 },  // 1
+        { 0x64, 0x46, 0x68, 0x86, 0x60, 0x06, 0x57, 0x75, 0x53, 0x35, 0x54, 0x45 },  // 2
+        { 0x58, 0x85, 0x50, 0x05, 0x56, 0x65, 0x17, 0x71, 0x13, 0x31, 0x14, 0x41 },  // 3
+        { 0x18, 0x81, 0x10, 0x01, 0x16, 0x61, 0x15, 0x51, 0x27, 0x72, 0x23, 0x32 },  // 4
+        { 0x24, 0x42, 0x28, 0x82, 0x20, 0x02, 0x26, 0x62, 0x25, 0x52, 0x21, 0x12 },  // 5
+        { 0xa7, 0x7a, 0xa3, 0x3a, 0xa4, 0x4a, 0xa8, 0x8a, 0xa0, 0x0a, 0xa6, 0x6a },  // 6
+        { 0xa5, 0x5a, 0xa1, 0x1a, 0xa2, 0x2a, 0x97, 0x79, 0x93, 0x39, 0x94, 0x49 },  // 7
 };
 
 // Every byte represents a column of the LED matrix.
@@ -780,7 +779,7 @@ void write_message(char *buffer, int num_bytes) {
 
 // To translate a pin number from an integer value to its analog pin number
 // equivalent, this array is used to look up the value to use for the pin.
-int analog_read_pins[6] = {A0, A1, A2, A3, A4, A5};
+int analog_read_pins[6] = { A0, A1, A2, A3, A4, A5 };
 
 // a descriptor for digital pins
 struct pin_descriptor {
@@ -892,6 +891,7 @@ AccelStepper *steppers[MAX_NUMBER_OF_STEPPERS];
 uint8_t stepper_run_modes[MAX_NUMBER_OF_STEPPERS];
 #endif
 
+
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 /*                       Command Functions                          */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
@@ -899,7 +899,7 @@ uint8_t stepper_run_modes[MAX_NUMBER_OF_STEPPERS];
 
 // A method to send debug data across the serial link
 void send_debug_info(byte id, int value) {
-    byte debug_buffer[5] = {(byte) 4, (byte) DEBUG_PRINT, 0, 0, 0};
+    byte debug_buffer[5] = { (byte)4, (byte)DEBUG_PRINT, 0, 0, 0 };
     debug_buffer[2] = id;
     debug_buffer[3] = highByte(value);
     debug_buffer[4] = lowByte(value);
@@ -1248,7 +1248,7 @@ void sonar_new() {
 #ifdef SONAR_ENABLED
 
     // command_buffer[0] = trigger pin,  command_buffer[1] = echo pin
-    sonars[sonars_index].usonic = new NewPing((uint8_t) command_buffer[0], (uint8_t) command_buffer[1]);
+    sonars[sonars_index].usonic = new NewPing((uint8_t)command_buffer[0], (uint8_t)command_buffer[1]);
     sonars[sonars_index].trigger_pin = command_buffer[0];
     sonars_index++;
 #endif
@@ -1540,17 +1540,17 @@ void set_pin_mode_stepper() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // interface = command_buffer[1]
-    // pin1 = command_buffer[2]
-    // pin2 = command_buffer[3]
-    // pin3 = command_buffer[4]
-    // pin4 = command_buffer[5]
-    // enable = command_buffer[6]
+  // interface = command_buffer[1]
+  // pin1 = command_buffer[2]
+  // pin2 = command_buffer[3]
+  // pin3 = command_buffer[4]
+  // pin4 = command_buffer[5]
+  // enable = command_buffer[6]
 
-    // instantiate a stepper object and store it in the stepper array
-    steppers[command_buffer[0]] = new AccelStepper(command_buffer[1], command_buffer[2],
-                                                   command_buffer[3], command_buffer[4],
-                                                   command_buffer[5], command_buffer[6]);
+  // instantiate a stepper object and store it in the stepper array
+  steppers[command_buffer[0]] = new AccelStepper(command_buffer[1], command_buffer[2],
+                                                 command_buffer[3], command_buffer[4],
+                                                 command_buffer[5], command_buffer[6]);
 #endif
 }
 
@@ -1558,21 +1558,21 @@ void stepper_move_to() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
-    // polarity = command_buffer[5]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
+  // polarity = command_buffer[5]
 
-    // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[1]) << 24;
-    position += (long) (command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
-    if (command_buffer[5]) {
-        position *= -1;
-    }
-    steppers[command_buffer[0]]->moveTo(position);
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[1]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
+  if (command_buffer[5]) {
+    position *= -1;
+  }
+  steppers[command_buffer[0]]->moveTo(position);
 #endif
 }
 
@@ -1580,22 +1580,22 @@ void stepper_move() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
-    // polarity = command_buffer[5]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
+  // polarity = command_buffer[5]
 
 
-    // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[1]) << 24;
-    position += (long) (command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
-    if (command_buffer[5]) {
-        position *= -1;
-    }
-    steppers[command_buffer[0]]->move(position);
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[1]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
+  if (command_buffer[5]) {
+    position *= -1;
+  }
+  steppers[command_buffer[0]]->move(position);
 #endif
 }
 
@@ -1617,11 +1617,11 @@ void stepper_set_max_speed() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // speed_msb = command_buffer[1]
-    // speed_lsb = command_buffer[2]
+  // speed_msb = command_buffer[1]
+  // speed_lsb = command_buffer[2]
 
-    float max_speed = (float) ((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setMaxSpeed(max_speed);
+  float max_speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
+  steppers[command_buffer[0]]->setMaxSpeed(max_speed);
 #endif
 }
 
@@ -1629,11 +1629,11 @@ void stepper_set_acceleration() {
 #ifdef STEPPERS_ENABLED
 
     // motor_id = command_buffer[0]
-    // accel_msb = command_buffer[1]
-    // accel = command_buffer[2]
+  // accel_msb = command_buffer[1]
+  // accel = command_buffer[2]
 
-    float acceleration = (float) ((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setAcceleration(acceleration);
+  float acceleration = (float)((command_buffer[1] << 8) + command_buffer[2]);
+  steppers[command_buffer[0]]->setAcceleration(acceleration);
 #endif
 }
 
@@ -1644,8 +1644,8 @@ void stepper_set_speed() {
     // speed_lsb = command_buffer[2]
 #ifdef STEPPERS_ENABLED
 
-    float speed = (float) ((command_buffer[1] << 8) + command_buffer[2]);
-    steppers[command_buffer[0]]->setSpeed(speed);
+    float speed = (float)((command_buffer[1] << 8) + command_buffer[2]);
+  steppers[command_buffer[0]]->setSpeed(speed);
 #endif
 }
 
@@ -1653,19 +1653,19 @@ void stepper_get_distance_to_go() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_DISTANCE_TO_GO, motor_id, distance(8 bytes)
+  // report = STEPPER_DISTANCE_TO_GO, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = {6, STEPPER_DISTANCE_TO_GO, command_buffer[0]};
+  byte report_message[7] = { 6, STEPPER_DISTANCE_TO_GO, command_buffer[0] };
 
-    long dtg = steppers[command_buffer[0]]->distanceToGo();
+  long dtg = steppers[command_buffer[0]]->distanceToGo();
 
 
-    report_message[3] = (byte)((dtg & 0xFF000000) >> 24);
-    report_message[4] = (byte)((dtg & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((dtg & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((dtg & 0x000000FF));
+  report_message[3] = (byte)((dtg & 0xFF000000) >> 24);
+  report_message[4] = (byte)((dtg & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((dtg & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((dtg & 0x000000FF));
 
     // motor_id = command_buffer[0]
     write_message((char *)report_message, 7);
@@ -1676,19 +1676,19 @@ void stepper_get_target_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_TARGET_POSITION, motor_id, distance(8 bytes)
+  // report = STEPPER_TARGET_POSITION, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = {6, STEPPER_TARGET_POSITION, command_buffer[0]};
+  byte report_message[7] = { 6, STEPPER_TARGET_POSITION, command_buffer[0] };
 
-    long target = steppers[command_buffer[0]]->targetPosition();
+  long target = steppers[command_buffer[0]]->targetPosition();
 
 
-    report_message[3] = (byte)((target & 0xFF000000) >> 24);
-    report_message[4] = (byte)((target & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((target & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((target & 0x000000FF));
+  report_message[3] = (byte)((target & 0xFF000000) >> 24);
+  report_message[4] = (byte)((target & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((target & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((target & 0x000000FF));
 
     // motor_id = command_buffer[0]
     write_message((char *)report_message, 7);
@@ -1699,19 +1699,19 @@ void stepper_get_current_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_CURRENT_POSITION, motor_id, distance(8 bytes)
+  // report = STEPPER_CURRENT_POSITION, motor_id, distance(8 bytes)
 
 
 
-    byte report_message[7] = {6, STEPPER_CURRENT_POSITION, command_buffer[0]};
+  byte report_message[7] = { 6, STEPPER_CURRENT_POSITION, command_buffer[0] };
 
-    long position = steppers[command_buffer[0]]->currentPosition();
+  long position = steppers[command_buffer[0]]->currentPosition();
 
 
-    report_message[3] = (byte)((position & 0xFF000000) >> 24);
-    report_message[4] = (byte)((position & 0x00FF0000) >> 16);
-    report_message[5] = (byte)((position & 0x0000FF00) >> 8);
-    report_message[6] = (byte)((position & 0x000000FF));
+  report_message[3] = (byte)((position & 0xFF000000) >> 24);
+  report_message[4] = (byte)((position & 0x00FF0000) >> 16);
+  report_message[5] = (byte)((position & 0x0000FF00) >> 8);
+  report_message[6] = (byte)((position & 0x000000FF));
 
     // motor_id = command_buffer[0]
     write_message((char *)report_message, 7);
@@ -1721,18 +1721,18 @@ void stepper_get_current_position() {
 void stepper_set_current_position() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
-    // position MSB = command_buffer[1]
-    // position MSB-1 = command_buffer[2]
-    // position MSB-2 = command_buffer[3]
-    // position LSB = command_buffer[4]
+  // position MSB = command_buffer[1]
+  // position MSB-1 = command_buffer[2]
+  // position MSB-2 = command_buffer[3]
+  // position LSB = command_buffer[4]
 
-    // convert the 4 position bytes to a long
-    long position = (long) (command_buffer[2]) << 24;
-    position += (long) (command_buffer[2]) << 16;
-    position += command_buffer[3] << 8;
-    position += command_buffer[4];
+  // convert the 4 position bytes to a long
+  long position = (long)(command_buffer[2]) << 24;
+  position += (long)(command_buffer[2]) << 16;
+  position += command_buffer[3] << 8;
+  position += command_buffer[4];
 
-    steppers[command_buffer[0]]->setCurrentPosition(position);
+  steppers[command_buffer[0]]->setCurrentPosition(position);
 #endif
 }
 
@@ -1746,8 +1746,8 @@ void stepper_run_speed_to_position() {
 void stepper_stop() {
 #ifdef STEPPERS_ENABLED
     steppers[command_buffer[0]]->stop();
-    steppers[command_buffer[0]]->disableOutputs();
-    stepper_run_modes[command_buffer[0]] = STEPPER_STOP;
+  steppers[command_buffer[0]]->disableOutputs();
+  stepper_run_modes[command_buffer[0]] = STEPPER_STOP;
 
 
 #endif
@@ -1768,24 +1768,24 @@ void stepper_enable_outputs() {
 void stepper_set_minimum_pulse_width() {
 #ifdef STEPPERS_ENABLED
     unsigned int pulse_width = (command_buffer[1] << 8) + command_buffer[2];
-    steppers[command_buffer[0]]->setMinPulseWidth(pulse_width);
+  steppers[command_buffer[0]]->setMinPulseWidth(pulse_width);
 #endif
 }
 
 void stepper_set_enable_pin() {
 #ifdef STEPPERS_ENABLED
-    steppers[command_buffer[0]]->setEnablePin((uint8_t) command_buffer[1]);
+    steppers[command_buffer[0]]->setEnablePin((uint8_t)command_buffer[1]);
 #endif
 }
 
 void stepper_set_3_pins_inverted() {
 #ifdef STEPPERS_ENABLED
     // command_buffer[1] = directionInvert
-    // command_buffer[2] = stepInvert
-    // command_buffer[3] = enableInvert
-    steppers[command_buffer[0]]->setPinsInverted((bool) command_buffer[1],
-                                                 (bool) command_buffer[2],
-                                                 (bool) command_buffer[3]);
+  // command_buffer[2] = stepInvert
+  // command_buffer[3] = enableInvert
+  steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
+                                               (bool)command_buffer[2],
+                                               (bool)command_buffer[3]);
 #endif
 }
 
@@ -1796,11 +1796,11 @@ void stepper_set_4_pins_inverted() {
     // command_buffer[4] = pin4
     // command_buffer[5] = enable
 #ifdef STEPPERS_ENABLED
-    steppers[command_buffer[0]]->setPinsInverted((bool) command_buffer[1],
-                                                 (bool) command_buffer[2],
-                                                 (bool) command_buffer[3],
-                                                 (bool) command_buffer[4],
-                                                 (bool) command_buffer[5]);
+    steppers[command_buffer[0]]->setPinsInverted((bool)command_buffer[1],
+                                               (bool)command_buffer[2],
+                                               (bool)command_buffer[3],
+                                               (bool)command_buffer[4],
+                                               (bool)command_buffer[5]);
 #endif
 }
 
@@ -1808,12 +1808,12 @@ void stepper_is_running() {
 #ifdef STEPPERS_ENABLED
     // motor_id = command_buffer[0]
 
-    // report = STEPPER_IS_RUNNING, motor_id, distance(8 bytes)
+  // report = STEPPER_IS_RUNNING, motor_id, distance(8 bytes)
 
 
-    byte report_message[3] = {2, STEPPER_RUNNING_REPORT, command_buffer[0]};
+  byte report_message[3] = { 2, STEPPER_RUNNING_REPORT, command_buffer[0] };
 
-    report_message[2] = steppers[command_buffer[0]]->isRunning();
+  report_message[2] = steppers[command_buffer[0]]->isRunning();
 
     write_message((char *)report_message, 3);
 #endif
@@ -1878,7 +1878,6 @@ void get_next_command() {
         }
     }
     command_entry.command_func();
-
 }
 
 // reset the internal data structures to a known state
@@ -1959,16 +1958,16 @@ void scan_digital_inputs() {
     // byte 1 = report type
     // byte 2 = pin number
     // byte 3 = value
-    byte report_message[4] = {3, DIGITAL_REPORT, 0, 0};
+    byte report_message[4] = { 3, DIGITAL_REPORT, 0, 0 };
 
     for (int i = 0; i < MAX_DIGITAL_PINS_SUPPORTED; i++) {
         if (the_digital_pins[i].pin_mode == INPUT || the_digital_pins[i].pin_mode == INPUT_PULLUP) {
             if (the_digital_pins[i].reporting_enabled) {
                 // if the value changed since last read
-                value = (byte) digitalRead(the_digital_pins[i].pin_number);
+                value = (byte)digitalRead(the_digital_pins[i].pin_number);
                 if (value != the_digital_pins[i].last_value) {
                     the_digital_pins[i].last_value = value;
-                    report_message[2] = (byte) i;
+                    report_message[2] = (byte)i;
                     report_message[3] = value;
                     write_message((char *) report_message, 4);
                     delay(1);
@@ -1990,7 +1989,7 @@ void scan_analog_inputs() {
     // byte 3 = high order byte of value
     // byte 4 = low order byte of value
 
-    byte report_message[5] = {4, ANALOG_REPORT, 0, 0, 0};
+    byte report_message[5] = { 4, ANALOG_REPORT, 0, 0, 0 };
 
     uint8_t adjusted_pin_number;
     int differential;
@@ -2011,7 +2010,7 @@ void scan_analog_inputs() {
                         //trigger value achieved, send out the report
                         the_analog_pins[i].last_value = value;
                         // input_message[1] = the_analog_pins[i].pin_number;
-                        report_message[2] = (byte) i;
+                        report_message[2] = (byte)i;
                         report_message[3] = highByte(value);  // get high order byte
                         report_message[4] = lowByte(value);
                         write_message((char *) report_message, 5);
@@ -2075,7 +2074,7 @@ void scan_dhts() {
     // byte 9 = temperature integer portion
     // byte 10= temperature fractional portion
 
-    byte report_message[11] = {10, DHT_REPORT, DHT_DATA, 0, 0, 0, 0, 0, 0, 0, 0};
+    byte report_message[11] = { 10, DHT_REPORT, DHT_DATA, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     int rv;
 
@@ -2100,7 +2099,7 @@ void scan_dhts() {
                 } else {
                     rv = dhts[i].dht_sensor->read11(dhts[i].pin);
                 }
-                report_message[2] = (uint8_t) rv;
+                report_message[2] = (uint8_t)rv;
 
                 // if rv is not zero, this is an error report
                 if (rv) {
@@ -2115,7 +2114,7 @@ void scan_dhts() {
                         report_message[5] = 1;
                     }
                     f = modff(humidity, &j);
-                    report_message[7] = (uint8_t) j;
+                    report_message[7] = (uint8_t)j;
                     report_message[8] = (uint8_t)(f * 100);
 
                     float temperature = dhts[i].dht_sensor->getTemperature();
@@ -2127,7 +2126,7 @@ void scan_dhts() {
 
                     f = modff(temperature, &j);
 
-                    report_message[9] = (uint8_t) j;
+                    report_message[9] = (uint8_t)j;
                     report_message[10] = (uint8_t)(f * 100);
                     write_message((char *) report_message, 11);
                 }
@@ -2141,7 +2140,7 @@ void scan_dhts() {
 void run_steppers() {
 #ifdef STEPPERS_ENABLED
     boolean running;
-    long target_position;
+  long target_position;
 
 
     for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
@@ -2189,7 +2188,7 @@ void run_matrix() {
         if (millis() >= t_prev + scroll_speed) {
             t_prev = millis();
             scroll += 1;                                               // Scroll to the left.
-            if (scroll > 5 * strlen((char *) banner_text)) scroll = 0;  // restart
+            if (scroll > 5 * strlen((char *)banner_text)) scroll = 0;  // restart
         }
     }
 #endif
@@ -2235,13 +2234,14 @@ void setup() {
     for (uint8_t i = 0; i < led_matrix_pin_count; i++) {
         pinMode(led_matrix_pin_first + i, INPUT);  // all off
     }
+
 #endif
 
 #ifdef STEPPERS_ENABLED
 
     for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
-        stepper_run_modes[i] = STEPPER_STOP;
-    }
+    stepper_run_modes[i] = STEPPER_STOP;
+  }
 #endif
 
     init_pin_structures();
@@ -2297,16 +2297,14 @@ void loop() {
 #endif
 
 #ifdef DHT_ENABLED
-            scan_dhts();
+        scan_dhts();
 #endif
-
-
 #ifdef STEPPERS_ENABLED
-            run_steppers();
+        run_steppers();
 #endif
 
 #ifdef LED_MATRIX_SUPPORTED
-            run_matrix();
+        run_matrix();
 #endif
 
         }
