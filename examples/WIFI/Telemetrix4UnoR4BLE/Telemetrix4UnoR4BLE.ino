@@ -19,13 +19,15 @@
 #include <WiFiS3.h>
 #include <HardwareBLESerial.h>
 
+// comment out this line to suppress the starting banner
+#define ENABLE_STARTING_BANNER 1
 
+// the name may be changed, but then it must be passed
+// in to the ble_device_name parameter of the python telemetrix object
 const char *ble_name = "Telemetrix4UnoR4 BLE";
 
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
-// comment out this line to suppress the starting banner
-#define ENABLE_STARTING_BANNER 1
 
 
 // This file is rather large, so it has been rearranged in logical sections.
