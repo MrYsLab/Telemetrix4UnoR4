@@ -19,14 +19,12 @@
 #include <WiFiS3.h>
 #include <HardwareBLESerial.h>
 
+// comment out this line to suppress the starting banner
+#define ENABLE_STARTING_BANNER 1
 
 const char *ble_name = "Telemetrix4UnoR4 BLE";
 
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
-
-// comment out this line to suppress the starting banner
-#define ENABLE_STARTING_BANNER 1
-
 
 // This file is rather large, so it has been rearranged in logical sections.
 // Here is the list of sections to help make it easier to locate items of interest,
@@ -48,9 +46,6 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 /*                    FEATURE ENABLING DEFINES                      */
 /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-// comment out this line to suppress the starting banner
-#define ENABLE_STARTING_BANNER 1
-
 // To disable a feature, comment out the desired enabling define or defines
 
 // This will allow SPI support to be compiled into the sketch.
@@ -59,7 +54,7 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 // This will allow OneWire support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-#define ONE_WIRE_ENABLED 1
+// #define ONE_WIRE_ENABLED 1
 
 // This will allow DHT support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
