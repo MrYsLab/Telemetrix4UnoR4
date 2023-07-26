@@ -2268,10 +2268,10 @@ void setup() {
 
     if (!bleSerial.beginAndSetupBLE("Telemetrix4UnoR4 BLE")) {
         while (true) {
-            delay(1000);
 #ifdef ENABLE_STARTING_BANNER
             run_matrix();
 #endif
+            ;
         }
     }
 #ifdef ENABLE_STARTING_BANNER
