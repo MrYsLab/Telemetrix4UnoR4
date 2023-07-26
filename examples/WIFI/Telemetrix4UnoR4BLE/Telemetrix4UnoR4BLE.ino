@@ -546,7 +546,7 @@ TwoWire *current_i2c_port;
 #ifdef LED_MATRIX_SUPPORTED
 #define MAX_SCROLL_MESSAGE 25
 uint8_t run_banner = 0;
-static uint8_t banner_text[50] = "Telemetrix BLE Wait...  ";
+static uint8_t banner_text[50] = "X X X X X X X X X X ";
 uint8_t scroll_speed = 50;
 const uint16_t ontime = 521;  // microseconds. 521 (us) * 96 (pixels) = 50 ms frame rate if all the pixels are on.
 static uint8_t scroll = 0;    // scroll position.
@@ -903,13 +903,13 @@ void send_debug_info(byte id, int value) {
     debug_buffer[2] = id;
     debug_buffer[3] = highByte(value);
     debug_buffer[4] = lowByte(value);
-    write_message((char *) debug_buffer, 5);
+    write_message((char *)debug_buffer, 5);
 }
 
 // a function to loop back data over the serial port
 void serial_loopback() {
-    byte loop_back_buffer[3] = {2, (byte) SERIAL_LOOP_BACK, command_buffer[0]};
-    write_message((char *) loop_back_buffer, 3);
+    byte loop_back_buffer[3] = { 2, (byte)SERIAL_LOOP_BACK, command_buffer[0] };
+    write_message((char *)loop_back_buffer, 3);
 }
 
 void set_pin_mode()
@@ -1021,21 +1021,21 @@ void modify_reporting() {
 
 // retrieve the features byte
 void get_features() {
-    byte report_message[3] = {2, FEATURES, features};
-    write_message((char *) report_message, 3);
+    byte report_message[3] = { 2, FEATURES, features };
+    write_message((char *)report_message, 3);
 }
 
 // Return the firmware version number
 void get_firmware_version() {
-    byte report_message[5] = {4, FIRMWARE_REPORT, FIRMWARE_MAJOR, FIRMWARE_MINOR,
-                              FIRMWARE_PATCH};
-    write_message((char *) report_message, 5);
+    byte report_message[5] = { 4, FIRMWARE_REPORT, FIRMWARE_MAJOR, FIRMWARE_MINOR,
+                               FIRMWARE_PATCH };
+    write_message((char *)report_message, 5);
 }
 
 // Query the firmware for the Arduino ID in use
 void are_you_there() {
-    byte report_message[3] = {2, I_AM_HERE, ARDUINO_ID};
-    write_message((char *) report_message, 3);
+    byte report_message[3] = { 2, I_AM_HERE, ARDUINO_ID };
+    write_message((char *)report_message, 3);
 }
 
 /***************************************************
@@ -1049,11 +1049,11 @@ int find_servo() {
 
 #ifdef SERVO_ENABLED
     for (int i = 0; i < MAX_SERVOS; i++) {
-        if (servos[i].attached() == false) {
-            index = i;
-            break;
-        }
+    if (servos[i].attached() == false) {
+      index = i;
+      break;
     }
+  }
 #endif
 
     return index;
@@ -1063,21 +1063,21 @@ int find_servo() {
 void servo_attach() {
 #ifdef SERVO_ENABLED
     byte pin = command_buffer[0];
-    int servo_found = -1;
+  int servo_found = -1;
 
-    int minpulse = (command_buffer[1] << 8) + command_buffer[2];
-    int maxpulse = (command_buffer[3] << 8) + command_buffer[4];
+  int minpulse = (command_buffer[1] << 8) + command_buffer[2];
+  int maxpulse = (command_buffer[3] << 8) + command_buffer[4];
 
-    // find the first available open servo
-    servo_found = find_servo();
-    if (servo_found != -1) {
-        pin_to_servo_index_map[servo_found] = pin;
-        servos[servo_found].attach(pin, minpulse, maxpulse);
-    } else {
-        // no open servos available, send a report back to client
-        byte report_message[2] = {SERVO_UNAVAILABLE, pin};
-        write_message((char *) report_message, 2);
-    }
+  // find the first available open servo
+  servo_found = find_servo();
+  if (servo_found != -1) {
+    pin_to_servo_index_map[servo_found] = pin;
+    servos[servo_found].attach(pin, minpulse, maxpulse);
+  } else {
+    // no open servos available, send a report back to client
+    byte report_message[2] = { SERVO_UNAVAILABLE, pin };
+    write_message((char *)report_message, 2);
+  }
 #endif
 }
 
@@ -1085,15 +1085,15 @@ void servo_attach() {
 void servo_write() {
 #ifdef SERVO_ENABLED
     byte pin = command_buffer[0];
-    int angle = command_buffer[1];
-    // find the servo object for the pin
-    for (int i = 0; i < MAX_SERVOS; i++) {
-        if (pin_to_servo_index_map[i] == pin) {
+  int angle = command_buffer[1];
+  // find the servo object for the pin
+  for (int i = 0; i < MAX_SERVOS; i++) {
+    if (pin_to_servo_index_map[i] == pin) {
 
-            servos[i].write(angle);
-            return;
-        }
+      servos[i].write(angle);
+      return;
     }
+  }
 #endif
 }
 
@@ -1102,14 +1102,14 @@ void servo_detach() {
 #ifdef SERVO_ENABLED
     byte pin = command_buffer[0];
 
-    // find the servo object for the pin
-    for (int i = 0; i < MAX_SERVOS; i++) {
-        if (pin_to_servo_index_map[i] == pin) {
+  // find the servo object for the pin
+  for (int i = 0; i < MAX_SERVOS; i++) {
+    if (pin_to_servo_index_map[i] == pin) {
 
-            pin_to_servo_index_map[i] = -1;
-            servos[i].detach();
-        }
+      pin_to_servo_index_map[i] = -1;
+      servos[i].detach();
     }
+  }
 #endif
 }
 
@@ -1164,19 +1164,19 @@ void i2c_read() {
     // write byte is true, then write the register
     if (command_buffer[5]) {
         current_i2c_port->beginTransmission(address);
-        current_i2c_port->write((byte) the_register);
+        current_i2c_port->write((byte)the_register);
         current_i2c_port->endTransmission(command_buffer[3]);  // default = true
     }
     current_i2c_port->requestFrom(address, command_buffer[2]);  // all bytes are returned in requestFrom
 
     // check to be sure correct number of bytes were returned by slave
     if (command_buffer[2] < current_i2c_port->available()) {
-        byte report_message[4] = {3, I2C_TOO_FEW_BYTES_RCVD, 1, address};
-        write_message((char *) report_message, 4);
+        byte report_message[4] = { 3, I2C_TOO_FEW_BYTES_RCVD, 1, address };
+        write_message((char *)report_message, 4);
         return;
     } else if (command_buffer[2] > current_i2c_port->available()) {
-        byte report_message[4] = {3, I2C_TOO_MANY_BYTES_RCVD, 1, address};
-        write_message((char *) report_message, 4);
+        byte report_message[4] = { 3, I2C_TOO_MANY_BYTES_RCVD, 1, address };
+        write_message((char *)report_message, 4);
         return;
     }
 
@@ -1203,7 +1203,7 @@ void i2c_read() {
         i2c_report_message[6 + message_size] = current_i2c_port->read();
     }
     // send slave address, register and received bytes
-    write_message((char *) i2c_report_message, message_size + 6);
+    write_message((char *)i2c_report_message, message_size + 6);
 
 #endif
 }
@@ -1386,7 +1386,7 @@ void read_blocking_spi() {
     digitalWrite(command_buffer[0], 1);
 
     SPI.endTransaction();
-    write_message((char *) spi_report_message,
+    write_message((char *)spi_report_message,
                   command_buffer[1] + 5);
 
 #endif
@@ -1452,8 +1452,8 @@ void onewire_reset() {
 #ifdef ONE_WIRE_ENABLED
 
     uint8_t reset_return = ow->reset();
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_RESET, reset_return};
-    write_message((char *) onewire_report_message, 4);
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_RESET, reset_return };
+    write_message((char *)onewire_report_message, 4);
 #endif
 }
 
@@ -1497,8 +1497,8 @@ void onewire_read() {
 
     uint8_t data = ow->read();
 
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_READ, data};
-    write_message((char *) onewire_report_message, 4);
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_READ, data };
+    write_message((char *)onewire_report_message, 4);
 
 #endif
 }
@@ -1515,12 +1515,12 @@ void onewire_reset_search() {
 void onewire_search() {
 #ifdef ONE_WIRE_ENABLED
 
-    uint8_t onewire_report_message[] = {10, ONE_WIRE_REPORT, ONE_WIRE_SEARCH,
-                                        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                        0xff};
+    uint8_t onewire_report_message[] = { 10, ONE_WIRE_REPORT, ONE_WIRE_SEARCH,
+                                         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                         0xff };
 
     ow->search(&onewire_report_message[3]);
-    write_message((char *) onewire_report_message, 11);
+    write_message((char *)onewire_report_message, 11);
 #endif
 }
 
@@ -1529,8 +1529,8 @@ void onewire_crc8() {
 #ifdef ONE_WIRE_ENABLED
 
     uint8_t crc = ow->crc8(&command_buffer[1], command_buffer[0]);
-    uint8_t onewire_report_message[] = {3, ONE_WIRE_REPORT, ONE_WIRE_CRC8, crc};
-    write_message((char *) onewire_report_message, 4);
+    uint8_t onewire_report_message[] = { 3, ONE_WIRE_REPORT, ONE_WIRE_CRC8, crc };
+    write_message((char *)onewire_report_message, 4);
 #endif
 }
 
@@ -1667,8 +1667,8 @@ void stepper_get_distance_to_go() {
   report_message[5] = (byte)((dtg & 0x0000FF00) >> 8);
   report_message[6] = (byte)((dtg & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+  // motor_id = command_buffer[0]
+  write_message((char *)report_message, 7);
 #endif
 }
 
@@ -1690,8 +1690,8 @@ void stepper_get_target_position() {
   report_message[5] = (byte)((target & 0x0000FF00) >> 8);
   report_message[6] = (byte)((target & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+  // motor_id = command_buffer[0]
+  write_message((char *)report_message, 7);
 #endif
 }
 
@@ -1713,8 +1713,8 @@ void stepper_get_current_position() {
   report_message[5] = (byte)((position & 0x0000FF00) >> 8);
   report_message[6] = (byte)((position & 0x000000FF));
 
-    // motor_id = command_buffer[0]
-    write_message((char *)report_message, 7);
+  // motor_id = command_buffer[0]
+  write_message((char *)report_message, 7);
 #endif
 }
 
@@ -1815,7 +1815,7 @@ void stepper_is_running() {
 
   report_message[2] = steppers[command_buffer[0]]->isRunning();
 
-    write_message((char *)report_message, 3);
+  write_message((char *)report_message, 3);
 #endif
 }
 
@@ -1852,14 +1852,14 @@ void get_next_command() {
         return;
     }
     // get the packet length
-    packet_length = (byte) bleSerial.read();
+    packet_length = (byte)bleSerial.read();
 
     while (not bleSerial.available()) {
         delay(1);
     }
 
     // get the command byte
-    command = (byte) bleSerial.read();
+    command = (byte)bleSerial.read();
 
     // uncomment the next line to see the packet length and command
     //send_debug_info(packet_length, command);
@@ -1872,7 +1872,7 @@ void get_next_command() {
             while (not bleSerial.available()) {
                 delay(1);
             }
-            command_buffer[i] = (byte) bleSerial.read();
+            command_buffer[i] = (byte)bleSerial.read();
             // uncomment out to see each of the bytes following the command
             //send_debug_info(i, command_buffer[i]);
         }
@@ -1894,10 +1894,10 @@ void reset_data() {
     // detach any attached servos
 #ifdef SERVO_ENABLED
     for (int i = 0; i < MAX_SERVOS; i++) {
-        if (servos[i].attached() == true) {
-            servos[i].detach();
-        }
+    if (servos[i].attached() == true) {
+      servos[i].detach();
     }
+  }
 #endif
 
 #ifdef SONAR_ENABLED
@@ -1969,7 +1969,7 @@ void scan_digital_inputs() {
                     the_digital_pins[i].last_value = value;
                     report_message[2] = (byte)i;
                     report_message[3] = value;
-                    write_message((char *) report_message, 4);
+                    write_message((char *)report_message, 4);
                     delay(1);
                 }
             }
@@ -2013,7 +2013,7 @@ void scan_analog_inputs() {
                         report_message[2] = (byte)i;
                         report_message[3] = highByte(value);  // get high order byte
                         report_message[4] = lowByte(value);
-                        write_message((char *) report_message, 5);
+                        write_message((char *)report_message, 5);
                         delay(1);
                     }
                 }
@@ -2040,9 +2040,9 @@ void scan_sonars() {
                 // byte 2 = trigger pin number
                 // byte 3 = distance high order byte
                 // byte 4 = distance low order byte
-                byte report_message[5] = {4, SONAR_DISTANCE, sonars[last_sonar_visited].trigger_pin,
-                                          (byte)(distance >> 8), (byte)(distance & 0xff)};
-                write_message((char *) report_message, 5);
+                byte report_message[5] = { 4, SONAR_DISTANCE, sonars[last_sonar_visited].trigger_pin,
+                                           (byte)(distance >> 8), (byte)(distance & 0xff) };
+                write_message((char *)report_message, 5);
             }
             last_sonar_visited++;
             if (last_sonar_visited == sonars_index) {
@@ -2103,7 +2103,7 @@ void scan_dhts() {
 
                 // if rv is not zero, this is an error report
                 if (rv) {
-                    write_message((char *) report_message, 11);
+                    write_message((char *)report_message, 11);
                     return;
                 } else {
                     float j, f;
@@ -2128,7 +2128,7 @@ void scan_dhts() {
 
                     report_message[9] = (uint8_t)j;
                     report_message[10] = (uint8_t)(f * 100);
-                    write_message((char *) report_message, 11);
+                    write_message((char *)report_message, 11);
                 }
             }
         }
@@ -2143,38 +2143,38 @@ void run_steppers() {
   long target_position;
 
 
-    for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
-        if (stepper_run_modes[i] == STEPPER_STOP) {
-            continue;
-        } else {
-            steppers[i]->enableOutputs();
-            switch (stepper_run_modes[i]) {
-                case STEPPER_RUN:
-                    steppers[i]->run();
-                    running = steppers[i]->isRunning();
-                    if (!running) {
-                        byte report_message[3] = {2, STEPPER_RUN_COMPLETE_REPORT, (byte) i};
-                        write_message((char *)report_message, 3);
-                        stepper_run_modes[i] = STEPPER_STOP;
-                    }
-                    break;
-                case STEPPER_RUN_SPEED:
-                    steppers[i]->runSpeed();
-                    break;
-                case STEPPER_RUN_SPEED_TO_POSITION:
-                    running = steppers[i]->runSpeedToPosition();
-                    target_position = steppers[i]->targetPosition();
-                    if (target_position == steppers[i]->currentPosition()) {
-                        byte report_message[3] = {2, STEPPER_RUN_COMPLETE_REPORT, (byte) i};
-                        write_message((char *)report_message, 3);
-                        stepper_run_modes[i] = STEPPER_STOP;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+  for (int i = 0; i < MAX_NUMBER_OF_STEPPERS; i++) {
+    if (stepper_run_modes[i] == STEPPER_STOP) {
+      continue;
+    } else {
+      steppers[i]->enableOutputs();
+      switch (stepper_run_modes[i]) {
+        case STEPPER_RUN:
+          steppers[i]->run();
+          running = steppers[i]->isRunning();
+          if (!running) {
+            byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+            write_message((char *)report_message, 3);
+            stepper_run_modes[i] = STEPPER_STOP;
+          }
+          break;
+        case STEPPER_RUN_SPEED:
+          steppers[i]->runSpeed();
+          break;
+        case STEPPER_RUN_SPEED_TO_POSITION:
+          running = steppers[i]->runSpeedToPosition();
+          target_position = steppers[i]->targetPosition();
+          if (target_position == steppers[i]->currentPosition()) {
+            byte report_message[3] = { 2, STEPPER_RUN_COMPLETE_REPORT, (byte)i };
+            write_message((char *)report_message, 3);
+            stepper_run_modes[i] = STEPPER_STOP;
+          }
+          break;
+        default:
+          break;
+      }
     }
+  }
 #endif
 }
 
@@ -2247,7 +2247,8 @@ void setup() {
     init_pin_structures();
 
     Serial.begin(115200);
-    while (!Serial) { ;  // wait for serial port to connect.
+    while (!Serial) {
+        ;  // wait for serial port to connect.
     }
 #ifdef ENABLE_STARTING_BANNER
     led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
@@ -2265,19 +2266,28 @@ void setup() {
 
     if (!bleSerial.beginAndSetupBLE("Telemetrix4UnoR4 BLE")) {
         while (true) {
-            Serial.println("failed to initialize HardwareBLESerial!");
             delay(1000);
+#ifdef ENABLE_STARTING_BANNER
+            run_matrix();
+#endif
         }
     }
-
-    while (!bleSerial)
+#ifdef ENABLE_STARTING_BANNER
+    memset(banner_text, 0, sizeof(banner_text));
+    memset(led_matrix_buffer, 0, sizeof(led_matrix_buffer));
+    strcpy((char *)banner_text, "Telemetrix BLE   ");
+    led_matrix_puts(led_matrix_buffer, sizeof(led_matrix_buffer), banner_text);
+#endif
+    while (!bleSerial) {
+#ifdef ENABLE_STARTING_BANNER
         run_matrix();
-
+#endif
+        ;
+    }
     Serial.println("HardwareBLESerial central device connected!");
 #ifdef ENABLE_STARTING_BANNER
     run_banner = false;
 #endif
-
 }
 
 void loop() {
@@ -2286,7 +2296,7 @@ void loop() {
         // keep processing incoming commands
         get_next_command();
 
-        if (!stop_reports) { // stop reporting
+        if (!stop_reports) {  // stop reporting
             scan_digital_inputs();
             scan_analog_inputs();
 
@@ -2297,16 +2307,15 @@ void loop() {
 #endif
 
 #ifdef DHT_ENABLED
-        scan_dhts();
+            scan_dhts();
 #endif
 #ifdef STEPPERS_ENABLED
-        run_steppers();
+            run_steppers();
 #endif
 
 #ifdef LED_MATRIX_SUPPORTED
-        run_matrix();
+            run_matrix();
 #endif
-
         }
     } else {
         bleSerial.end();
