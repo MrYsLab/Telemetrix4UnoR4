@@ -47,7 +47,7 @@
 
 // This will allow OneWire support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-#define ONE_WIRE_ENABLED 1
+// #define ONE_WIRE_ENABLED 1
 
 // This will allow DHT support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
