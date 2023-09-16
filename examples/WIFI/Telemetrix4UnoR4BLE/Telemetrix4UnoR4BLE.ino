@@ -73,7 +73,7 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 // This will allow servo support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
-// #define SERVO_ENABLED 1
+#define SERVO_ENABLED 1
 
 // This will allow stepper support to be compiled into the sketch.
 // Comment this out to save sketch space for the UNO
